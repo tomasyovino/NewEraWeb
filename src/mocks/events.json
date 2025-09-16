@@ -1,0 +1,38 @@
+[
+  {
+    "id": "e1",
+    "name_es": "Torneo 1v1",
+    "name_en": "1v1 Tournament",
+    "dayOfWeek": 1,
+    "time": "13:00",
+    "description_es": "Duelo 1v1 los lunes",
+    "description_en": "1v1 duels on Mondays"
+  },
+  {
+    "id": "e2",
+    "name_es": "Survival",
+    "name_en": "Survival",
+    "dayOfWeek": 2,
+    "time": "15:00",
+    "description_es": "Oleadas de monstruos",
+    "description_en": "Monster waves"
+  },
+  {
+    "id": "e3",
+    "name_es": "Pelea de clanes",
+    "name_en": "Clan fight",
+    "dayOfWeek": 4,
+    "time": "21:00",
+    "description_es": "PvP por equipos",
+    "description_en": "Team PvP"
+  },
+  {
+    "id": "e4",
+    "name_es": "Dungeon run",
+    "name_en": "Dungeon run",
+    "dayOfWeek": 6,
+    "time": "18:00",
+    "description_es": "Recorrido de mazmorras",
+    "description_en": "Dungeon farming"
+  }
+]

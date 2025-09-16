@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #424f5b;
+  --color-surface: #8c98b4;
+  --color-primary: #1c2023;
+  --color-accent: #3e4c6a;
+  --color-muted: #251f34;
+  --color-text: #e6edf3;
+  --color-subtle: #9aa7b2;
+  --color-danger: #ef4444;
+}
+
+html, body, #__next { height: 100%; }
+body { @apply bg-bg text-text; }
+
+.container-default {
+  @apply max-w-5xl mx-auto px-4;
+}
+
+.card {
+  @apply bg-surface/80 rounded-2xl border border-surface/40 shadow;
+}
+
+.nav-link {
+  @apply px-3 py-2 rounded-xl hover:bg-surface/60 transition;
+}

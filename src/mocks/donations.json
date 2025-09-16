@@ -1,0 +1,26 @@
+[
+  {
+    "id": "d1",
+    "name_es": "Montura Etérea",
+    "name_en": "Ethereal Mount",
+    "description_es": "Montura exclusiva",
+    "description_en": "Exclusive mount",
+    "price_eur": 10
+  },
+  {
+    "id": "d2",
+    "name_es": "Tintura rara",
+    "name_en": "Rare Dye",
+    "description_es": "Color único para tu ropa",
+    "description_en": "Unique color for your outfit",
+    "price_eur": 5
+  },
+  {
+    "id": "d3",
+    "name_es": "Casa pequeña",
+    "name_en": "Small House",
+    "description_es": "Lote básico",
+    "description_en": "Basic plot",
+    "price_eur": 25
+  }
+]
