@@ -1,18 +1,16 @@
 {
-  "brand": "UO New Era",
+  "brand": "New Era",
   "nav": {
-    "home": "Home",
-    "about": "About",
-    "discord": "Discord",
-    "wiki": "Wiki",
-    "donate": "Donate"
+    "events": "Events",
+    "donate": "Donate",
+    "community": "Community",
+    "download": "Download"
+  },
+  "cta": {
+    "playDownload": "Play"
   },
   "home": {
-    "title": "Welcome to UO New Era",
-    "subtitle": "A classic shard with weekly events and an active community.",
-    "todayEvents": "Today's Events",
-    "noEventsToday": "No events today. Check back soon!",
-    "weeklySchedule": "Weekly Schedule"
+    "subtitle": "A classic shard with weekly events and an active community. Download the client, join Discord, and explore."
   },
   "about": {
     "title": "About UO New Era",

@@ -1,76 +1,79 @@
-import '../styles/global.css';
-import Image from 'next/image';
-import Link from 'next/link';
+import '../../styles/global.css';
 import type { ReactNode } from 'react';
+import Link from 'next/link';
 import fs from 'node:fs';
 import path from 'node:path';
+import { LangSwitch } from '@/components';
+import { AnchorToHome, LogoMark } from '@/components';
+import Image from 'next/image';
 
-type Dict = Record<string, any>;
-
-function loadDict(lang: string): Dict {
+function t(lang: 'es'|'en') {
   const p = path.join(process.cwd(), 'i18n', `${lang}.json`);
-  const raw = fs.readFileSync(p, 'utf8');
-  return JSON.parse(raw);
+  return JSON.parse(fs.readFileSync(p, 'utf8'));
 }
 
 export default function RootLayout({ children, params }: { children: ReactNode; params: { lang: string } }) {
-  const dict = loadDict(params.lang || 'es');
+  const lang = (params.lang === 'en' ? 'en' : 'es') as 'es'|'en';
+  const dict = t(lang);
 
   return (
-    <html lang={params.lang}>
+    <html lang={lang}>
       <head>
         <link rel="icon" href="/images/favicon.ico" />
         <title>{dict.brand}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="var(--color-bg)" />
       </head>
-      <body className="min-h-screen">
-        <header className="border-b border-surface/60">
-          <div className="container-default flex items-center gap-4 py-3">
-            <Link href={`/${params.lang}`} className="flex items-center gap-3">
-              <Image src="/images/logo.png" alt="logo" width={36} height={36} className="rounded-xl" />
-              <span className="font-semibold tracking-wide">{dict.brand}</span>
-            </Link>
-            <nav className="ml-auto flex items-center gap-1">
-              <NavLink href={`/${params.lang}`}>{dict.nav.home}</NavLink>
-              <NavLink href={`/${params.lang}/about`}>{dict.nav.about}</NavLink>
-              <NavLink href={`/${params.lang}/discord`}>{dict.nav.discord}</NavLink>
-              <NavLink href={`/${params.lang}/wiki`}>{dict.nav.wiki}</NavLink>
-              <NavLink href={`/${params.lang}/donate`}>{dict.nav.donate}</NavLink>
-            </nav>
-            <div className="ml-2">
-              <LangSwitcher current={params.lang} />
+      <body>
+        {/* Fondo atmosférico */}
+        <div className="bg-scene"></div>
+        <div className="bg-dots"></div>
+        <div className="vignette"></div>
+
+        {/* Header capsule */}
+        <div className="header-wrap">
+          <div className="header">
+            {/* IZQ: menú/idioma */}
+            <div className="flex items-center gap-8">
+              <LangSwitch current={lang} />
+              {/* nav pills (anchor links) */}
+              <nav className="nav">
+                <AnchorToHome lang={lang} hash="events"   className="">{dict.nav.events}</AnchorToHome>
+                <Link href={`/${lang}/donate`}>{dict.nav.donate}</Link>
+                <AnchorToHome lang={lang} hash="community" className="">{dict.nav.community}</AnchorToHome>
+                <AnchorToHome lang={lang} hash="download"  className="">{dict.nav.download}</AnchorToHome>
+              </nav>
             </div>
+
+            {/* CENTRO: brand compacto */}
+            <Link href={`/${lang}`} className="brand" style={{color:'#bcd7ff'}}>
+              <Image src="/images/logo.png" alt="New Era" width={40} height={40} className="icon-glow" />
+            </Link>
+
+            {/* DER: CTA */}
+            <AnchorToHome
+              lang={lang}
+              hash="download"
+              className="btn btn-primary w-[120px] justify-center whitespace-nowrap"
+            >
+              {dict.cta.playDownload}
+            </AnchorToHome>
           </div>
-        </header>
-        <main className="container-default py-8">{children}</main>
-        <footer className="mt-12 border-t border-surface/60">
-          <div className="container-default py-6 text-sm text-subtle">
-            © {new Date().getFullYear()} UO New Era — All rights reserved.
+        </div>
+
+        <main className="main-pad">
+          {/* por ahora no ponemos contenido; sólo estructura */}
+          <div className="container">
+            {children}
+          </div>
+        </main>
+
+        <footer className="container mt-16 py-8 text-sm" id="footer">
+          <div style={{borderTop:'1px solid var(--stroke)', paddingTop: '16px', color:'var(--muted)'}}>
+            © {new Date().getFullYear()} New Era
           </div>
         </footer>
       </body>
     </html>
-  );
-}
-
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link href={href} className="nav-link text-subtle hover:text-text">
-      {children}
-    </Link>
-  );
-}
-
-function LangSwitcher({ current }: { current: string }) {
-  const other = current === 'es' ? 'en' : 'es';
-  return (
-    <Link
-      className="px-3 py-2 rounded-xl border border-surface/60 hover:bg-surface/60 transition text-subtle hover:text-text"
-      href={`/${other}`}
-    >
-      {other.toUpperCase()}
-    </Link>
   );
 }
 

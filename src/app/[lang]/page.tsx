@@ -1,71 +1,173 @@
-import { getWeeklyEvents } from '@/lib/data-source';
-import { todayWeekday } from '@/lib/time';
 import fs from 'node:fs';
 import path from 'node:path';
+import { Reveal, TodayEvents } from '@/components';
+import { getTodayEventSlots, getWeeklyAgendaSlots } from '@/lib/data-source';
+import { buildTodaySentences } from '@/lib/event-text';
+import type { Locale } from '@/lib/types';
+import Image from 'next/image';
+import { DEFAULT_TZ } from '@/lib/constants';
 
-function loadDict(lang: string) {
+function dict(lang: Locale) {
   const p = path.join(process.cwd(), 'i18n', `${lang}.json`);
   return JSON.parse(fs.readFileSync(p, 'utf8'));
 }
 
-export default async function Page({ params }: { params: { lang: string } }) {
-  const dict = loadDict(params.lang || 'es');
-  const events = await getWeeklyEvents();
-  const today = todayWeekday(process.env.TZ || 'Europe/Madrid');
+export default async function HomePage({ params }: { params: { lang: string } }) {
+  const lang = (params.lang === 'en' ? 'en' : 'es') as Locale;
+  const d = dict(lang);
 
-  const todays = events.filter(e => e.dayOfWeek === today);
-  const weekly = events.sort((a,b)=> (a.dayOfWeek - b.dayOfWeek) || a.time.localeCompare(b.time));
+  const today = await getTodayEventSlots();
+  const weekly = await getWeeklyAgendaSlots();
+  const sentences = buildTodaySentences(today, lang);
+
+  const DISCORD_URL = process.env.DISCORD_URL || 'https://discord.com';
+  const WIKI_URL = process.env.WIKI_URL || '';
+  const DL_WIN = process.env.DOWNLOAD_URL_WIN || '#';
+  const DL_MAC = process.env.DOWNLOAD_URL_MAC || '';
+
+  const dayNamesES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const dayNamesEN = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const dayNames = lang === 'es' ? dayNamesES : dayNamesEN;
+
+  const grouped: Record<number, typeof weekly> = {};
+  for (const s of weekly) (grouped[s.dayOfWeek] ||= []).push(s);
+  const order = [1,2,3,4,5,6,0];
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-2xl p-6 bg-[url('/images/background.png')] bg-cover bg-center ring-1 ring-surface/50">
-        <h1 className="text-2xl md:text-3xl font-bold drop-shadow">{dict.home.title}</h1>
-        <p className="text-subtle mt-1">{dict.home.subtitle}</p>
-      </div>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">{dict.home.todayEvents}</h2>
-        {todays.length === 0 ? (
-          <p className="text-subtle">{dict.home.noEventsToday}</p>
-        ) : (
-          <ul className="grid md:grid-cols-2 gap-3">
-            {todays.map(ev => (
-              <li key={ev.id} className="card p-4">
-                <div className="font-medium">{params.lang === 'es' ? ev.name_es : ev.name_en}</div>
-                <div className="text-subtle text-sm">{ev.time}</div>
-                {ev.description_es && (
-                  <p className="mt-2 text-sm text-subtle">
-                    {params.lang === 'es' ? ev.description_es : ev.description_en}
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">{dict.home.weeklySchedule}</h2>
-        <div className="grid md:grid-cols-2 gap-3">
-          {weekly.map(ev => (
-            <div key={ev.id} className="card p-4 flex items-center justify-between">
-              <div>
-                <div className="font-medium">{params.lang === 'es' ? ev.name_es : ev.name_en}</div>
-                <p className="text-subtle text-sm">
-                  {weekdayName(ev.dayOfWeek, params.lang)} · {ev.time}
+    <>
+      {/* HERO */}
+      <section id="hero" className="section">
+        <div className="container">
+          <Reveal>
+            <div className="hero">
+              <div className="hero-media" style={{ backgroundImage: "url(/images/hero-bg.webp)" }} />
+              <div className="hero-content">
+                <div className="hero-eyebrow">{lang==='es' ? 'Bienvenido' : 'Welcome'}</div>
+                <h1 className="hero-title">New Era</h1>
+                <p className="hero-sub">
+                  {d.home.subtitle}
                 </p>
+                <div className="pillbar">
+                  <a href="#download" className="pill">{lang==='es' ? 'Descargar' : 'Download'}</a>
+                  <a href="#community" className="pill">Discord & Wiki</a>
+                  <a href="#events" className="pill">{lang==='es' ? 'Eventos' : 'Events'}</a>
+                </div>
               </div>
             </div>
-          ))}
+          </Reveal>
         </div>
       </section>
-    </div>
-  );
-}
 
-function weekdayName(d: number, lang: string) {
-  const es = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  const en = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const arr = lang === 'es' ? es : en;
-  return arr[d] || '';
+      {/* EVENTS */}
+      <section id="events" className="section">
+        <div className="container">
+          <Reveal><h2 className="section-title">{lang==='es' ? 'Eventos' : 'Events'}</h2></Reveal>
+
+          {/* Hoy */}
+          <Reveal className="mt-4">
+            <TodayEvents slots={today} serverTz={DEFAULT_TZ} lang={lang} />
+          </Reveal>
+
+          {/* Semanal */}
+          <Reveal className="mt-6">
+            <div className="grid md:grid-cols-2 gap-4">
+              {order.map((dIdx) => (
+                <div key={dIdx} className="tile">
+                  <div className="tile-cta">
+                    <h3>{dayNames[dIdx]}</h3>
+                    <span className="chip">{(grouped[dIdx]?.length || 0)} {lang==='es' ? 'eventos' : 'events'}</span>
+                  </div>
+                  <ul className="list-soft space-y-1">
+                    {(grouped[dIdx] || []).map((s, i) => (
+                      <li key={`${s.id}-${i}`}>
+                        <span className="truncate">{s.name[lang]}</span>
+                        <span className="chip">{s.time}</span>
+                      </li>
+                    ))}
+                    {(grouped[dIdx] || []).length === 0 && (
+                      <li style={{color:'var(--muted)'}}>—</li>
+                    )}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* COMMUNITY (Discord / Wiki) */}
+      <section id="community" className="section">
+        <div className="container">
+          <Reveal><h2 className="section-title">{lang==='es' ? 'Comunidad' : 'Community'}</h2></Reveal>
+          <Reveal className="mt-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              {/* Discord */}
+              <a className="tile tile-cta hover:brightness-105" href={DISCORD_URL} target="_blank" rel="noreferrer">
+                <div className="flex items-center gap-3">
+                  <Image src="/images/discord.svg" alt="Discord" width={28} height={28} className="icon icon-glow" />
+                  <div>
+                    <h3>Discord</h3>
+                    <p style={{color:'var(--muted)'}}>{lang==='es' ? 'Únete a la comunidad y a los anuncios' : 'Join the community and announcements'}</p>
+                  </div>
+                </div>
+                <span className="chip">{lang==='es' ? 'Abrir' : 'Open'}</span>
+              </a>
+
+              {/* Wiki */}
+              <a className="tile tile-cta hover:brightness-105" href={WIKI_URL || '#'} target={WIKI_URL ? '_blank' : undefined} rel={WIKI_URL ? 'noreferrer' : undefined}>
+                <div className="flex items-center gap-3">
+                  <Image src="/images/guide.svg" alt="Wiki" width={28} height={28} className="icon icon-glow" />
+                  <div>
+                    <h3>Wiki</h3>
+                    <p style={{color:'var(--muted)'}}>{lang==='es' ? 'Guías, sistemas y progresión' : 'Guides, systems and progression'}</p>
+                  </div>
+                </div>
+                <span className="chip">{WIKI_URL ? (lang==='es' ? 'Abrir' : 'Open') : (lang==='es' ? 'Pronto' : 'Soon')}</span>
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* DOWNLOAD */}
+      <section id="download" className="section">
+        <div className="container">
+          <Reveal><h2 className="section-title">{lang==='es' ? 'Descargar' : 'Download'}</h2></Reveal>
+
+          <Reveal className="mt-4">
+            <div className="tile">
+              {/* CTA grande */}
+              <div className="dl-banner">
+                <div>
+                  <div className="kicker">{lang==='es' ? 'Cliente del juego' : 'Game client'}</div>
+                  <h3>{lang==='es' ? 'Descarga y juega' : 'Download & play'}</h3>
+                </div>
+                <div className="dl-buttons">
+                  <a target="_blank" href={DL_WIN} className="btn btn-primary btn-xl btn-fixed">Windows</a>
+                  {DL_MAC && (
+                    <a target="_blank" href={DL_MAC} className="btn btn-ghost btn-xl btn-fixed">macOS</a>
+                  )}
+                </div>
+              </div>
+
+              {/* info compacta */}
+              <div className="meta-list">
+                <div>
+                  <span>{lang==='es' ? 'Tamaño de descarga' : 'Download size'}</span>{' '}
+                  <span className="chip">~1.2 GB</span>
+                </div>
+              </div>
+
+              {/* leyenda importante */}
+              <div className="note-box">
+                {lang==='es'
+                  ? 'Importante: Se requiere Windows 8 o una versión más reciente para ejecutar el launcher.'
+                  : 'Important: Windows 8 or a more recent version is required to run the launcher.'}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </>
+  );
 }

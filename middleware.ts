@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  if (pathname === '/') {
+  if (request.nextUrl.pathname === '/') {
     const url = request.nextUrl.clone();
     url.pathname = '/es';
     return NextResponse.redirect(url);
@@ -11,6 +10,4 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = {
-  matcher: ['/'],
-};
+export const config = { matcher: ['/'] };

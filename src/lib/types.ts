@@ -1,18 +1,49 @@
+export type Locale = 'es' | 'en';
+
+export type LocalizedString = {
+  es: string;
+  en: string;
+};
+
+export type DayOfWeek = number;
+
 export type WeeklyEvent = {
   id: string;
-  name_es: string;
-  name_en: string;
-  dayOfWeek: number; // 0=Sunday .. 6=Saturday
-  time: string;      // 'HH:mm' in server TZ
-  description_es?: string;
-  description_en?: string;
+  name: LocalizedString;
+  description?: LocalizedString;
+  dayOfWeek: DayOfWeek;
+  times: string[];
+  durationMinutes?: number;
+  featured?: boolean;
+  icon?: string;
 };
+
+export type EventSlot = {
+  id: string;
+  name: LocalizedString;
+  description?: LocalizedString;
+  dayOfWeek: DayOfWeek;
+  time: string;
+  durationMinutes?: number;
+  featured?: boolean;
+  icon?: string;
+};
+
+export type DonationCategory = 'cosmetic'|'mount'|'house'|'utility'|'other';
 
 export type Donation = {
   id: string;
-  name_es: string;
-  name_en: string;
-  description_es?: string;
-  description_en?: string;
-  price_eur: number;
+  name: LocalizedString;
+  description?: LocalizedString;
+  price: { currency: 'EUR'; amount: number };
+  category?: DonationCategory;
+  image?: string;
+};
+
+export type ServerStatus = {
+  online: boolean;
+  playersOnline: number;
+  maxPlayers: number;
+  uptimeMinutes: number;
+  lastRestartIso?: string;
 };

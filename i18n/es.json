@@ -1,18 +1,16 @@
 {
-  "brand": "UO New Era",
+  "brand": "New Era",
   "nav": {
-    "home": "Home",
-    "about": "Sobre nosotros",
-    "discord": "Discord",
-    "wiki": "Wiki",
-    "donate": "Donar"
+    "events": "Eventos",
+    "donate": "Donaciones",
+    "community": "Comunidad",
+    "download": "Descargar"
+  },
+  "cta": {
+    "playDownload": "Jugar"
   },
   "home": {
-    "title": "Bienvenido a UO New Era",
-    "subtitle": "Un servidor clásico con eventos semanales y comunidad activa.",
-    "todayEvents": "Eventos de hoy",
-    "noEventsToday": "No hay eventos para hoy. ¡Vuelve pronto!",
-    "weeklySchedule": "Calendario semanal"
+    "subtitle": "Un servidor clásico con eventos semanales y comunidad activa. Descargar, unirse al Discord y descubre el mundo."
   },
   "about": {
     "title": "Sobre UO New Era",
