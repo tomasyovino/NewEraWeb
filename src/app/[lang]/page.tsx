@@ -21,9 +21,9 @@ export default async function HomePage({ params }: { params: { lang: string } })
   const worldEvents = await getWorldEvents();
   const sentences = buildTodaySentences(today, lang);
 
-  const DISCORD_URL = process.env.DISCORD_URL || 'https://discord.com';
-  const WIKI_URL = process.env.WIKI_URL || '';
-  const DL_WIN = process.env.DOWNLOAD_URL_WIN || '#';
+  const NEXT_PUBLIC_DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_URL || 'https://discord.com';
+  const NEXT_PUBLIC_WIKI_URL = process.env.NEXT_PUBLIC_WIKI_URL || '';
+  const DL_WIN = process.env.NEXT_PUBLIC_DOWNLOAD_URL_WIN || '#';
   const DL_MAC = process.env.DOWNLOAD_URL_MAC || '';
 
   const dayNamesES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
@@ -134,7 +134,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
           <Reveal className="mt-4">
             <div className="grid md:grid-cols-2 gap-4">
               {/* Discord */}
-              <a className="tile tile-cta hover:brightness-105" href={DISCORD_URL} target="_blank" rel="noreferrer">
+              <a className="tile tile-cta hover:brightness-105" href={NEXT_PUBLIC_DISCORD_URL} target="_blank" rel="noreferrer">
                 <div className="flex items-center gap-3">
                   <Image src="/images/discord.svg" alt="Discord" width={28} height={28} className="icon icon-glow" />
                   <div>
@@ -146,7 +146,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
               </a>
 
               {/* Wiki */}
-              <a className="tile tile-cta hover:brightness-105" href={WIKI_URL || '#'} target={WIKI_URL ? '_blank' : undefined} rel={WIKI_URL ? 'noreferrer' : undefined}>
+              <a className="tile tile-cta hover:brightness-105" href={NEXT_PUBLIC_WIKI_URL || '#'} target={NEXT_PUBLIC_WIKI_URL ? '_blank' : undefined} rel={NEXT_PUBLIC_WIKI_URL ? 'noreferrer' : undefined}>
                 <div className="flex items-center gap-3">
                   <Image src="/images/guide.svg" alt="Wiki" width={28} height={28} className="icon icon-glow" />
                   <div>
@@ -154,7 +154,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
                     <p style={{color:'var(--muted)'}}>{lang==='es' ? 'Guías, sistemas y progresión' : 'Guides, systems and progression'}</p>
                   </div>
                 </div>
-                <span className="chip">{WIKI_URL ? (lang==='es' ? 'Abrir' : 'Open') : (lang==='es' ? 'Pronto' : 'Soon')}</span>
+                <span className="chip">{NEXT_PUBLIC_WIKI_URL ? (lang==='es' ? 'Abrir' : 'Open') : (lang==='es' ? 'Pronto' : 'Soon')}</span>
               </a>
             </div>
           </Reveal>

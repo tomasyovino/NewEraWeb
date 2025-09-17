@@ -1,16 +1,28 @@
-// src/lib/data-source.ts
-import { WeeklyEvent, EventSlot, Donation, ServerStatus, WorldEvent } from './types';
-import { weeklyEventListSchema, donationListSchema, serverStatusSchema, worldEventListSchema } from './schemas';
+import {
+  WeeklyEvent, EventSlot, Donation, ServerStatus, WorldEvent,
+} from './types';
+import {
+  weeklyEventListSchema, donationListSchema, serverStatusSchema, worldEventListSchema,
+} from './schemas';
 import { DEFAULT_TZ } from './constants';
 import { currentWeekday, compareTimeHHmm } from './time';
+import { eventsMock, worldEventsMock, donationsMock, statusMock} from '@/mocks'
 
 const isServer = typeof window === 'undefined';
 
+function boolEnv(name: string, def = true) {
+  const v = process.env[name];
+  if (v == null) return def;
+  const s = String(v).trim().toLowerCase();
+  return s === '1' || s === 'true' || s === 'yes' || s === 'on';
+}
+const USE_MOCK = boolEnv('USE_MOCK', true);
+
 function makeUrl(path: string) {
-  if (!isServer) return path; // en cliente, fetch relativo está OK
-  // Base para SSR: env primero; si no, dev local
+  if (!isServer) return path;
   const base =
-    process.env.NEXT_PUBLIC_BASE_URL
+    process.env.API_BASE_URL
+    ?? process.env.NEXT_PUBLIC_BASE_URL
     ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `http://localhost:${process.env.PORT ?? 3000}`);
   return new URL(path, base).toString();
 }
@@ -22,13 +34,38 @@ async function fetchJson<T>(path: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-// ── Eventos de mundo ──────────────────────────────────────────────────────
-export async function getWorldEvents(): Promise<WorldEvent[]> {
-  const raw = await fetchJson<unknown>('/api/admin/world-events?scope=public&limit=6&from=now');
+/* ================== WORLD EVENTS ================== */
+
+// Público (Home): activos o futuros, limitado (default 6)
+export async function getWorldEvents(opts?: { limit?: number; now?: Date }): Promise<WorldEvent[]> {
+  const limit = opts?.limit ?? 6;
+  const now = opts?.now ?? new Date();
+
+  if (USE_MOCK) {
+    const all = worldEventListSchema.parse(worldEventsMock as unknown);
+    const t = now.getTime();
+    return all
+      .filter(ev => Date.parse(ev.endsAt) >= t)
+      .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt))
+      .slice(0, Math.max(0, limit));
+  }
+
+  const qs = new URLSearchParams({ scope: 'public', limit: String(limit), from: 'now' });
+  const raw = await fetchJson<unknown>(`/api/admin/world-events?${qs.toString()}`);
   return worldEventListSchema.parse(raw);
 }
+
+// Admin: todo sin filtros
+export async function getWorldEventsAll(): Promise<WorldEvent[]> {
+  if (USE_MOCK) {
+    return worldEventListSchema.parse(worldEventsMock as unknown);
+  }
+  const raw = await fetchJson<unknown>('/api/admin/world-events');
+  return worldEventListSchema.parse(raw);
+}
+
 export async function getActiveWorldEvents(now: Date = new Date()): Promise<WorldEvent[]> {
-  const all = await getWorldEvents();
+  const all = await getWorldEvents({ now, limit: 999 });
   return all
     .filter(ev => {
       const s = Date.parse(ev.startsAt);
@@ -38,13 +75,15 @@ export async function getActiveWorldEvents(now: Date = new Date()): Promise<Worl
     })
     .sort((a, b) => Date.parse(a.endsAt) - Date.parse(b.endsAt));
 }
+
 export async function getUpcomingWorldEvents(limit?: number, now: Date = new Date()): Promise<WorldEvent[]> {
-  const all = await getWorldEvents();
+  const all = await getWorldEvents({ now, limit: 999 });
   const up = all
     .filter(ev => Date.parse(ev.startsAt) > now.getTime())
     .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt));
   return typeof limit === 'number' ? up.slice(0, Math.max(0, limit)) : up;
 }
+
 export async function getFeaturedWorldEvent(now: Date = new Date()): Promise<WorldEvent | undefined> {
   const active = await getActiveWorldEvents(now);
   const featActive = active.find(e => e.featured);
@@ -53,8 +92,12 @@ export async function getFeaturedWorldEvent(now: Date = new Date()): Promise<Wor
   return upcoming.find(e => e.featured) ?? upcoming[0];
 }
 
-// ── Eventos semanales ─────────────────────────────────────────────────────
+/* ================== WEEKLY EVENTS ================== */
+
 export async function getWeeklyEvents(): Promise<WeeklyEvent[]> {
+  if (USE_MOCK) {
+    return weeklyEventListSchema.parse(eventsMock as unknown);
+  }
   const raw = await fetchJson<unknown>('/api/admin/weekly-events');
   return weeklyEventListSchema.parse(raw);
 }
@@ -101,12 +144,26 @@ export async function getWeeklyAgendaSlots(): Promise<EventSlot[]> {
   return out.sort((a, b) => (a.dayOfWeek - b.dayOfWeek) || compareTimeHHmm(a.time, b.time));
 }
 
-// ── Donaciones / Estado (cuando los conectes) ─────────────────────────────
+/* ================== DONATIONS / STATUS ================== */
+
 export async function getDonations(): Promise<Donation[]> {
-  const raw = await fetchJson<unknown>('/api/donations');   // crea la ruta cuando toque
+  if (USE_MOCK) {
+    try {
+      return donationListSchema.parse(donationsMock as unknown);
+    } catch { return []; }
+  }
+  const raw = await fetchJson<unknown>('/api/donations');
   return donationListSchema.parse(raw);
 }
+
 export async function getStatus(): Promise<ServerStatus> {
-  const raw = await fetchJson<unknown>('/api/status');      // crea la ruta cuando toque
+  if (USE_MOCK) {
+    try {
+      return serverStatusSchema.parse(statusMock as unknown);
+    } catch {
+      return serverStatusSchema.parse({ online: true, players: 0, peak24h: 0, message: null });
+    }
+  }
+  const raw = await fetchJson<unknown>('/api/status');
   return serverStatusSchema.parse(raw);
 }

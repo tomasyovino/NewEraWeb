@@ -8,7 +8,7 @@ function loadDict(lang: string) {
 
 export default function WikiPage({ params }: { params: { lang: string } }) {
   const dict = loadDict(params.lang || 'es');
-  const url = process.env.WIKI_URL;
+  const url = process.env.NEXT_PUBLIC_WIKI_URL;
   return (
     <div className="card p-6">
       <h1 className="text-xl font-semibold">{dict.wiki.title}</h1>

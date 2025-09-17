@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import fs from 'node:fs';
 import path from 'node:path';
-import { LangSwitch } from '@/components';
+import { LangSwitch, WikiFab, DiscordFab } from '@/components';
 import { AnchorToHome, LogoMark } from '@/components';
 import Image from 'next/image';
 
@@ -19,7 +19,12 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
   return (
     <html lang={lang}>
       <head>
-        <link rel="icon" href="/images/favicon.ico" />
+        <link rel="icon" href="/images/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-180.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/images/favicon-512.png" />
         <title>{dict.brand}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
@@ -45,9 +50,9 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
             </div>
 
             {/* CENTRO: brand compacto */}
-            {/* <Link href={`/${lang}`} className="brand" style={{color:'#bcd7ff'}}>
+            <Link href={`/${lang}`} className="brand" style={{color:'#bcd7ff'}}>
               <Image src="/images/logo.png" alt="New Era" width={40} height={40} className="icon-glow" />
-            </Link> */}
+            </Link>
 
             {/* DER: CTA */}
             <AnchorToHome
@@ -72,6 +77,10 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
             © <span suppressHydrationWarning>{new Date().getFullYear()}</span> New Era
           </div>
         </footer>
+        <div className="fab-stack">
+          <DiscordFab lang={lang} />
+          <WikiFab lang={lang} />
+        </div>
       </body>
     </html>
   );

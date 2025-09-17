@@ -8,7 +8,7 @@ function loadDict(lang: string) {
 
 export default function DiscordPage({ params }: { params: { lang: string } }) {
   const dict = loadDict(params.lang || 'es');
-  const discordUrl = process.env.DISCORD_URL || 'https://discord.com';
+  const discordUrl = process.env.NEXT_PUBLIC_DISCORD_URL || 'https://discord.com';
   return (
     <div className="card p-6 text-center">
       <h1 className="text-xl font-semibold">{dict.discord.title}</h1>

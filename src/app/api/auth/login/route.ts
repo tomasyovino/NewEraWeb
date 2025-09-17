@@ -5,8 +5,8 @@ export async function POST(req: Request) {
   try { body = await req.json(); } catch {}
   const { username, password } = body;
 
-  const U = process.env.ADMIN_USER ?? 'admin';
-  const P = process.env.ADMIN_PASS ?? 'admin123';
+  const U = process.env.ADMIN_USERNAME ?? 'admin';
+  const P = process.env.ADMIN_PASSWORD ?? 'admin123';
 
   if (username === U && password === P) {
     const res = NextResponse.json({ ok: true });
