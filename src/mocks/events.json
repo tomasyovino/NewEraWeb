@@ -7,7 +7,7 @@
       "en": "Instanced 1v1 arena with best-of-3 single-elimination. Sign-ups open 15 minutes before at Britain bank and are announced in global chat. Standard gear rules; limited consumables and some hard-control spells are banned. Rewards: trophy, gold and seasonal ranking points. Perfect to practice mechanics and optimized builds."
     },
     "dayOfWeek": 1,
-    "times": ["13:00", "19:00"],
+    "times": ["15:00"],
     "durationMinutes": 60,
     "featured": true
   },
@@ -18,47 +18,37 @@
       "es": "Modo cooperativo por oleadas de monstruos en la arena de Moonglow. La dificultad escala según la cantidad de participantes y cada 5 oleadas aparece un mini-jefe con mecánicas especiales. No se pierde loot al morir; hay resurrecciones limitadas por ronda. Recompensas: fichas del evento canjeables por consumibles y cosméticos.",
       "en": "Co-op horde mode in Moonglow arena. Difficulty scales with the party size and every 5 waves a mini-boss spawns with unique mechanics. No loot loss on death; limited resurrections per round. Rewards: event tokens exchangeable for consumables and cosmetics."
     },
-    "dayOfWeek": 2,
-    "times": ["15:00"]
+    "dayOfWeek": 1,
+    "times": ["19:00"]
   },
   {
     "id": "e3",
-    "name": { "es": "Pelea de clanes", "en": "Clan fight" },
+    "name": { "es": "Dungeon run", "en": "Dungeon run" },
     "description": {
-      "es": "Batalla por equipos en mapa cerrado (8v8 recomendado). Objetivo mixto: capturar el estandarte central y sumar puntos por bajas. Son 3 rondas de 10 minutos con respawns controlados; se premia la coordinación de roles (frontline, healers y control). Recompensas: puntos de clan y decoraciones para la sede.",
-      "en": "Team battle in a closed battleground (recommended 8v8). Mixed objective: capture the central banner and earn points for kills. Three 10-minute rounds with controlled respawns; coordinated roles (frontline, healers, control) are key. Rewards: clan points and HQ decorations."
+      "es": "Expedición guiada a una mazmorra rotativa (Despise, Deceit, Destard…). Enfocado en farmeo seguro para nuevos jugadores: se explican rutas, pulls y jefes. Reglas de botín: reparto en turnos y tiradas para rarezas. Se recomienda ir con provisiones y runebooks cargados.",
+      "en": "Guided expedition to a rotating dungeon (Despise, Deceit, Destard…). Focused on safe farming for newer players: pathing, pulls and bosses are explained. Loot rules: round-robin and rolls for rares. Bring supplies and charged runebooks."
     },
-    "dayOfWeek": 4,
-    "times": ["21:00"]
+    "dayOfWeek": 3,
+    "times": ["18:00"]
   },
   {
     "id": "e4",
-    "name": { "es": "Dungeon run", "en": "Dungeon run" },
+    "name": { "es": "Torneo 2v2", "en": "2v2 Tournament" },
     "description": {
-      "es": "Expedición guiada a una mazmorra rotativa (Despise, Deceit, Destard…). Enfocado en farmeo seguro para nuevos jugadores: se explican rutas, pulls y jefes. Reglas de botín: reparto en turnos y tiradas para rarezas. Se recomienda ir con provisiones y runebooks cargados.",
-      "en": "Guided expedition to a rotating dungeon (Despise, Deceit, Destard…). Focused on safe farming for newer players: pathing, pulls and bosses are explained. Loot rules: round-robin and rolls for rares. Bring supplies and charged runebooks."
-    },
-    "dayOfWeek": 6,
-    "times": ["18:00"]
-  },
-  {
-    "id": "e7",
-    "name": { "es": "Dungeon run", "en": "Dungeon run" },
-    "description": {
-      "es": "Expedición guiada a una mazmorra rotativa (Despise, Deceit, Destard…). Enfocado en farmeo seguro para nuevos jugadores: se explican rutas, pulls y jefes. Reglas de botín: reparto en turnos y tiradas para rarezas. Se recomienda ir con provisiones y runebooks cargados.",
-      "en": "Guided expedition to a rotating dungeon (Despise, Deceit, Destard…). Focused on safe farming for newer players: pathing, pulls and bosses are explained. Loot rules: round-robin and rolls for rares. Bring supplies and charged runebooks."
+      "es": "Duelo 2v2 en arena instanciada con formato de eliminación directa (al mejor de 3). La inscripción abre 15 minutos antes en el banco de Britain y se anuncia por global. Se permiten sets estándar; consumibles limitados y prohibidos ciertos hechizos de control extremo. Recompensas: trofeo, oro y puntos de ranking de temporada. Ideal para practicar mecánicas puras y builds optimizadas.",
+      "en": "Instanced 2v2 arena with best-of-3 single-elimination. Sign-ups open 15 minutes before at Britain bank and are announced in global chat. Standard gear rules; limited consumables and some hard-control spells are banned. Rewards: trophy, gold and seasonal ranking points. Perfect to practice mechanics and optimized builds."
     },
     "dayOfWeek": 3,
-    "times": ["18:00"]
+    "times": ["20:00"]
   },
   {
     "id": "e5",
-    "name": { "es": "Pelea de clanes", "en": "Clan fight" },
+    "name": { "es": "Campeonato de Boxeo", "en": "Boxing Championship" },
     "description": {
-      "es": "Batalla por equipos en mapa cerrado (8v8 recomendado). Objetivo mixto: capturar el estandarte central y sumar puntos por bajas. Son 3 rondas de 10 minutos con respawns controlados; se premia la coordinación de roles (frontline, healers y control). Recompensas: puntos de clan y decoraciones para la sede.",
-      "en": "Team battle in a closed battleground (recommended 8v8). Mixed objective: capture the central banner and earn points for kills. Three 10-minute rounds with controlled respawns; coordinated roles (frontline, healers, control) are key. Rewards: clan points and HQ decorations."
+      "es": "¡Sube al ring y demuestra tu valía! Torneo de boxeo 1v1 con formato de eliminación directa, combates al mejor de 3 rounds. La inscripción abre 15 minutos antes en el gimnasio de Ocllo, con anuncio en el chat global. Equipamiento y consumibles estándar permitidos; se prohíbe el uso de armadura, armas y magia. Recompensas: guantes dorados, oro y un lugar en el Salón de la Fama de Boxeo. ¡Una prueba de pura habilidad, resistencia y puños rápidos!",
+      "en": "Step into the ring and prove your worth! 1v1 boxing tournament with a best-of-3 single-elimination format. Sign-ups open 15 minutes before at the Ocllo gym, announced in global chat. Standard gear and consumables are allowed; armor, weapons, and magic are strictly prohibited. Rewards: golden gloves, gold, and a spot in the Boxing Hall of Fame. A true test of pure skill, stamina, and quick fists!"
     },
-    "dayOfWeek": 3,
+    "dayOfWeek": 6,
     "times": ["15:00"]
   },
   {
@@ -68,7 +58,17 @@
       "es": "Duelo 1v1 en arena instanciada con formato de eliminación directa (al mejor de 3). La inscripción abre 15 minutos antes en el banco de Britain y se anuncia por global. Se permiten sets estándar; consumibles limitados y prohibidos ciertos hechizos de control extremo. Recompensas: trofeo, oro y puntos de ranking de temporada. Ideal para practicar mecánicas puras y builds optimizadas.",
       "en": "Instanced 1v1 arena with best-of-3 single-elimination. Sign-ups open 15 minutes before at Britain bank and are announced in global chat. Standard gear rules; limited consumables and some hard-control spells are banned. Rewards: trophy, gold and seasonal ranking points. Perfect to practice mechanics and optimized builds."
     },
-    "dayOfWeek": 3,
+    "dayOfWeek": 6,
     "times": ["19:00"]
+  },
+  {
+    "id": "e7",
+    "name": { "es": "Guerra de clanes", "en": "Clan war" },
+    "description": {
+      "es": "Batalla por equipos en mapa cerrado (8v8 recomendado). Objetivo mixto: capturar el estandarte central y sumar puntos por bajas. Son 3 rondas de 10 minutos con respawns controlados; se premia la coordinación de roles (frontline, healers y control). Recompensas: puntos de clan y decoraciones para la sede.",
+      "en": "Team battle in a closed battleground (recommended 8v8). Mixed objective: capture the central banner and earn points for kills. Three 10-minute rounds with controlled respawns; coordinated roles (frontline, healers, control) are key. Rewards: clan points and HQ decorations."
+    },
+    "dayOfWeek": 6,
+    "times": ["22:00"]
   }
 ]

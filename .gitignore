@@ -56,3 +56,5 @@ Thumbs.db
 *.local
 *.swp
 *.swo
+/data/*
+!/data/.gitkeep

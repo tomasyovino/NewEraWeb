@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Reveal, TodayEvents } from '@/components';
-import { getTodayEventSlots, getWeeklyAgendaSlots } from '@/lib/data-source';
+import { Reveal, TodayEvents, WorldEventsPanel } from '@/components';
+import { getTodayEventSlots, getWeeklyAgendaSlots, getWorldEvents } from '@/lib/data-source';
 import { buildTodaySentences } from '@/lib/event-text';
 import type { Locale } from '@/lib/types';
 import Image from 'next/image';
@@ -18,6 +18,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
 
   const today = await getTodayEventSlots();
   const weekly = await getWeeklyAgendaSlots();
+  const worldEvents = await getWorldEvents();
   const sentences = buildTodaySentences(today, lang);
 
   const DISCORD_URL = process.env.DISCORD_URL || 'https://discord.com';
@@ -63,34 +64,65 @@ export default async function HomePage({ params }: { params: { lang: string } })
         <div className="container">
           <Reveal><h2 className="section-title">{lang==='es' ? 'Eventos' : 'Events'}</h2></Reveal>
 
-          {/* Hoy */}
+          {/* Mundo */}
           <Reveal className="mt-4">
+            <WorldEventsPanel events={worldEvents} serverTz={DEFAULT_TZ} lang={lang} />
+          </Reveal>
+
+          {/* Hoy */}
+          <Reveal className="mt-6">
+            <div className="kicker" style={{ marginBottom: 8 }}>{lang === 'es' ? 'Eventos semanales' : 'Weekly schedule'}</div>
             <TodayEvents slots={today} serverTz={DEFAULT_TZ} lang={lang} />
           </Reveal>
 
           {/* Semanal */}
-          <Reveal className="mt-6">
-            <div className="grid md:grid-cols-2 gap-4">
-              {order.map((dIdx) => (
-                <div key={dIdx} className="tile">
-                  <div className="tile-cta">
-                    <h3>{dayNames[dIdx]}</h3>
-                    <span className="chip">{(grouped[dIdx]?.length || 0)} {lang==='es' ? 'eventos' : 'events'}</span>
+          <Reveal className="mt-4">
+            {(() => {
+              // mostrar solo días con eventos
+              const daysWith = order.filter((d) => (grouped[d]?.length ?? 0) > 0);
+
+              if (daysWith.length === 0) {
+                return (
+                  <div className="note" style={{ marginTop: 8 }}>
+                    {lang === 'es'
+                      ? 'No hay eventos semanales definidos por ahora.'
+                      : 'No weekly events defined yet.'}
                   </div>
-                  <ul className="list-soft space-y-1">
-                    {(grouped[dIdx] || []).map((s, i) => (
-                      <li key={`${s.id}-${i}`}>
-                        <span className="truncate">{s.name[lang]}</span>
-                        <span className="chip">{s.time}</span>
-                      </li>
+                );
+              }
+
+              return (
+                <>
+                  <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 mt-2">
+                    {daysWith.map((dIdx) => (
+                      <div key={dIdx} className="tile">
+                        <div className="tile-cta">
+                          <h3>{dayNames[dIdx]}</h3>
+                          <span className="chip">
+                            {grouped[dIdx].length}{' '}
+                            {lang === 'es' ? 'eventos' : 'events'}
+                          </span>
+                        </div>
+
+                        <ul className="list-soft space-y-1">
+                          {grouped[dIdx].map((s, i) => (
+                            <li key={`${s.id}-${i}`}>
+                              <span className="truncate">{s.name[lang]}</span>
+                              <span className="chip">{s.time}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ))}
-                    {(grouped[dIdx] || []).length === 0 && (
-                      <li style={{color:'var(--muted)'}}>—</li>
-                    )}
-                  </ul>
-                </div>
-              ))}
-            </div>
+                  </div>
+                  <div className="note mt-2">
+                    {lang==='es'
+                      ? `Horarios en hora del servidor (${DEFAULT_TZ}).`
+                      : `Times are in server time (${DEFAULT_TZ}).`}
+                  </div>
+                </>
+              );
+            })()}
           </Reveal>
         </div>
       </section>

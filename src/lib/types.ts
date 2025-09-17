@@ -47,3 +47,18 @@ export type ServerStatus = {
   uptimeMinutes: number;
   lastRestartIso?: string;
 };
+
+export interface WorldEvent {
+  id: string;
+  name: LocalizedString;
+  description?: LocalizedString;
+  startsAt: string;
+  endsAt: string;
+  banner?: string;
+  location?: LocalizedString;
+  featured?: boolean;
+  headline?: LocalizedString;
+  highlights?: LocalizedString[];
+  rewards?: LocalizedString[];
+  warnings?: LocalizedString[];
+}

@@ -45,9 +45,9 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
             </div>
 
             {/* CENTRO: brand compacto */}
-            <Link href={`/${lang}`} className="brand" style={{color:'#bcd7ff'}}>
+            {/* <Link href={`/${lang}`} className="brand" style={{color:'#bcd7ff'}}>
               <Image src="/images/logo.png" alt="New Era" width={40} height={40} className="icon-glow" />
-            </Link>
+            </Link> */}
 
             {/* DER: CTA */}
             <AnchorToHome
@@ -69,7 +69,7 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
 
         <footer className="container mt-16 py-8 text-sm" id="footer">
           <div style={{borderTop:'1px solid var(--stroke)', paddingTop: '16px', color:'var(--muted)'}}>
-            © {new Date().getFullYear()} New Era
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> New Era
           </div>
         </footer>
       </body>

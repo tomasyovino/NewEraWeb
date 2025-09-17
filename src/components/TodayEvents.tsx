@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useEffect, useState } from 'react';
+import { useMemo, useRef, useEffect, useState, useId } from 'react';
 import type { EventSlot, Locale } from '@/lib/types';
 
 /** Offset "+HH:MM" para una zona en una fecha dada usando Intl */
@@ -70,7 +70,7 @@ export default function TodayEvents({
 
     if (!groups.length) {
         return <p style={{ color: 'var(--muted)' }}>
-        {lang === 'es' ? 'No hay eventos programados para hoy.' : 'No events scheduled for today.'}
+        {lang === 'es' ? 'No hay eventos semanales programados para hoy.' : 'No weekly events scheduled for today.'}
         </p>;
     }
 
@@ -117,7 +117,8 @@ function GroupDetails({
   const bodyRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const uid = useRef(`desc-${Math.random().toString(36).slice(2)}`);
+  const uid = useId();
+  const descId = `desc-${uid}`
 
   useEffect(() => setMounted(true), []);
 
@@ -182,7 +183,7 @@ function GroupDetails({
         type="button"
         className="row cursor-pointer w-full text-left"
         aria-expanded={isOpen}
-        aria-controls={uid.current}
+        aria-controls={descId}
         onClick={toggle}
       >
         <div className="flex items-center gap-2">
@@ -218,7 +219,7 @@ function GroupDetails({
       </button>
 
       {g.desc && (
-        <div ref={bodyRef} id={uid.current} className="details-body mt-2">
+        <div ref={bodyRef} id={descId} className="details-body mt-2">
           <div><div className="text-sm">{g.desc}</div></div>
         </div>
       )}

@@ -1,0 +1,61 @@
+[
+  {
+    "id": "w-wyrm",
+    "name": { "es": "La Caza del Wyrm", "en": "Wyrm Hunt" },
+    "headline": {
+      "es": "NUEVO EVENTO EXPRESS: LA CAZA DEL WYRM",
+      "en": "NEW EXPRESS EVENT: WYRM HUNT"
+    },
+    "description": {
+      "es": "Un desafiante Wyrm ha emergido y la cacería se intensifica.",
+      "en": "A formidable Wyrm has emerged and the hunt intensifies."
+    },
+    "highlights": [
+      { "es": "Doble drop y botín especial durante el evento.", "en": "Double drop & special loot during the event." },
+      { "es": "El Wyrm es el NPC con drop elevado y garantiza un Pergamino de Potenciación.", "en": "The Wyrm has boosted drop rate and guarantees a Power Scroll." },
+      { "es": "Posible 'Cabeza del Wyrm' — ítem valioso que figura en su botín.", "en": "Chance for 'Wyrm Head' — a valuable trophy item." },
+      { "es": "Varkon ofrece 100k de oro y Tokens a quien entregue la Cabeza.", "en": "Varkon pays 100k gold + Tokens for delivering the Head." },
+      { "es": "¡Reúne a tu grupo! La Dragona Mayor no perdona errores.", "en": "Bring a team! The Matriarch punishes mistakes." }
+    ],
+    "rewards": [
+      { "es": "Trofeos conmemorativos únicos del evento", "en": "Unique commemorative trophies" },
+      { "es": "Pergamino de Potenciación garantizado por kill", "en": "Guaranteed Power Scroll per kill" },
+      { "es": "Tokens canjeables por cosméticos y consumibles", "en": "Tokens for cosmetics and consumables" }
+    ],
+    "startsAt": "2025-09-01T16:00:00+01:00",
+    "endsAt":   "2025-09-30T20:00:00+01:00",
+    "banner": "http://localhost:3000/images/caza_del_wyrm.webp",
+    "location": { "es": "Mazmorra - Shame", "en": "Dungeon - Shame" },
+    "featured": true
+  },
+  {
+    "id": "w-portal-fest",
+    "name": { "es": "Festival del Portal", "en": "Portal Festival" },
+    "description": {
+      "es": "Portales arcanos por todo Britannia con rarezas aumentadas y mini-jefes.",
+      "en": "Arcane portals across Britannia with increased rares and minibosses."
+    },
+    "startsAt": "2025-12-01T00:00:00+01:00",
+    "endsAt":   "2025-12-07T23:59:59+01:00"
+  },
+  {
+    "id": "w-winter-solstice",
+    "name": { "es": "Solsticio de Invierno", "en": "Winter Solstice" },
+    "description": {
+      "es": "El día más corto del año, se rumorea que el gran dragón ha despertado de su letargo.",
+      "en": "The shortest day of the year, it is rumored that the great dragon has awoken from its slumber."
+    },
+    "startsAt": "2025-12-21T00:00:00+01:00",
+    "endsAt":   "2025-12-21T23:59:59+01:00"
+  },
+  {
+    "id": "w-new-year",
+    "name": { "es": "Año Nuevo", "en": "New Year" },
+    "description": {
+      "es": "Un nuevo año trae nuevas esperanzas. ¡Reúne a tus amigos para celebrarlo!",
+      "en": "A new year brings new hopes. Gather your friends to celebrate it!"
+    },
+    "startsAt": "2026-01-01T00:00:00+01:00",
+    "endsAt":   "2026-01-01T23:59:59+01:00"
+  }
+]
