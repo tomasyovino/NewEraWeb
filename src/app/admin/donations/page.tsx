@@ -1,8 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import DonationForm from './DonationForm';
 import type { Donation, DonationCategory, DonationScope } from '@/lib/types';
+import DonationForm from './DonationForm';
 
 export default function AdminDonationsPage() {
   const [items, setItems] = useState<Donation[]>([]);
@@ -47,30 +48,23 @@ export default function AdminDonationsPage() {
         <div className="tile-cta">
           <div className="flex gap-2 flex-wrap">
             <input className="input" placeholder="Buscar..." value={q} onChange={e => setQ(e.target.value)} />
-            <select className="input" value={category} onChange={e => setCategory(e.target.value as any)}>
+            <select className="input admin-select" value={category} onChange={e => setCategory(e.target.value as any)}>
               <option value="">Categoría</option>
-              <option value="item">item</option>
-              <option value="special_item">special_item</option>
-              <option value="stat_boost">stat_boost</option>
-              <option value="land_mine">land_mine</option>
-              <option value="land_house">land_house</option>
-              <option value="currency_ne">currency_ne</option>
-              <option value="currency_ne_fake">currency_ne_fake</option>
+              <option value="item">Objetos</option>
+              <option value="stat_boost">Mejora de Personaje</option>
+              <option value="land_mine">Minas</option>
+              <option value="land_house">Casas</option>
+              <option value="mount">Monturas</option>
             </select>
-            <select className="input" value={scope} onChange={e => setScope(e.target.value as any)}>
+            <select className="input admin-select" value={scope} onChange={e => setScope(e.target.value as any)}>
               <option value="">Ámbito</option>
-              <option value="personal">personal</option>
-              <option value="clan">clan</option>
-              <option value="both">both</option>
+              <option value="personal">Personal</option>
+              <option value="clan">Clan</option>
+              <option value="both">Ambos</option>
             </select>
           </div>
 
-          <button className="btn btn-primary" onClick={() => setEditing({
-            id: '', slug: '', name: { es: '', en: '' }, category: 'item',
-            scope: 'personal', price: { eur: 0 }, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
-          } as Donation)}>
-            Nuevo
-          </button>
+          <Link className="btn btn-primary" href="/admin/donations/new">+ Nuevo</Link>
         </div>
 
         {loading ? <div className="note mt-2">Cargando…</div> : (
@@ -100,7 +94,7 @@ export default function AdminDonationsPage() {
                     <td>{d.price.neFake ?? '—'}</td>
                     <td className="text-right">
                       <div className="flex gap-2 justify-end">
-                        <button className="btn btn-ghost" onClick={() => setEditing(d)}>Editar</button>
+                        <Link className="btn btn-ghost" href={`/admin/donations/${d.id}`}>Editar</Link>
                         <button className="btn btn-ghost" onClick={async () => {
                           if (!confirm('¿Eliminar donación?')) return;
                           await fetch(`/api/admin/donations/${d.id}`, { method:'DELETE' });

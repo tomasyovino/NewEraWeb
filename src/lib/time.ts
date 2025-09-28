@@ -3,7 +3,7 @@ import type { DayOfWeek, Locale } from './types';
 export function currentWeekday(tz: string): DayOfWeek {
   const wd = new Intl.DateTimeFormat('en-US', { timeZone: tz, weekday: 'short' })
     .format(new Date());
-  const map: Record<string, DayOfWeek> = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
+  const map: Record<string, DayOfWeek> = { Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6, Sun:7 };
   return map[wd] ?? (new Date().getDay() as DayOfWeek);
 }
 

@@ -332,6 +332,25 @@ html { scroll-behavior: smooth; }
 }
 .input:focus{ outline:none; border-color:rgba(96,165,250,.45); box-shadow:0 0 0 3px rgba(96,165,250,.15) }
 
+.admin-select {
+  border:none; outline:none;
+  color:var(--ink); font-weight:600;
+  padding-left:6px;
+  padding-right:16px; 
+}
+.admin-select option {
+  color: var(--ink);
+  background: #0b0e14;
+}
+.admin-select optgroup { 
+  color: var(--ink);
+  background: #0b0e14;
+
+}
+.admin-select::after{
+  content:'▾'; position:absolute; right:8px; opacity:.7; pointer-events:none;
+}
+
 .fab-stack{
   position: fixed;
   right: clamp(12px,3vw,24px);

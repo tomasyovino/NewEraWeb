@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { WorldEvent, LocalizedString } from '@/lib/types';
-import { worldEventSchema } from '@/lib/schemas';
+import { worldEventsCreateSchema } from '@/app/api/_utils/worldEventSchemas';
 
 type Payload = Omit<WorldEvent, 'id'> & { id?: string };
 
@@ -10,7 +10,6 @@ const emptyLS = (v?: Partial<LocalizedString>): LocalizedString => ({
   es: v?.es ?? '', en: v?.en ?? '',
 });
 
-// datetime-local helpers ⇄ ISO
 const toLocalInput = (iso?: string) => {
   if (!iso) return '';
   const d = new Date(iso);
@@ -74,7 +73,7 @@ export default function EventForm({
     endsAt: new Date(Date.now() + 2*60*60*1000).toISOString(),
     location: undefined,
     featured: false,
-    banner: '',
+    banner: undefined,
     highlights: [],
     rewards: [],
     warnings: [],
@@ -85,16 +84,24 @@ export default function EventForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErr(null);
+
+    const payload: Payload = {
+      ...data,
+      banner: (data.banner && data.banner.trim().length ? data.banner.trim() : undefined),
+      highlights: data.highlights ?? [],
+      rewards: data.rewards ?? [],
+      warnings: data.warnings ?? [],
+    };
+
     try {
-      // Validación Zod final
-      worldEventSchema.parse({ ...data, banner: data.banner || undefined });
+      worldEventsCreateSchema.parse(payload);
     } catch (e: any) {
       setErr('Revisá los campos. ' + (e?.issues?.[0]?.message ?? ''));
       return;
     }
     setBusy(true);
     try {
-      await onSubmit({ ...data, banner: data.banner || undefined });
+      await onSubmit(payload);
     } catch (e: any) {
       setErr(e?.message ?? 'Error al guardar');
     } finally {
@@ -176,7 +183,7 @@ export default function EventForm({
         </label>
         <label className="grid gap-1">
           <span>Destacado</span>
-          <select className="input" value={data.featured ? '1' : '0'}
+          <select className="input admin-select" value={data.featured ? '1' : '0'}
             onChange={e => setData({ ...data, featured: e.target.value === '1' })}>
             <option value="0">No</option>
             <option value="1">Sí</option>
@@ -187,9 +194,12 @@ export default function EventForm({
       {/* Banner (URL opcional) */}
       <label className="grid gap-1">
         <span>Banner (URL — opcional)</span>
-        <input className="input" placeholder="https://…/banner.webp"
+        <input
+          className="input"
+          placeholder="https://…/banner.webp"
           value={data.banner ?? ''}
-          onChange={e => setData({ ...data, banner: e.target.value })} />
+          onChange={e => setData({ ...data, banner: e.target.value })}
+        />
       </label>
 
       {/* Listas: highlights / rewards / warnings */}

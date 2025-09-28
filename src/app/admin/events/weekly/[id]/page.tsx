@@ -13,7 +13,7 @@ export default function EditWeeklyEventPage() {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`/api/admin/weekly-events/${params.id}`);
+      const res = await fetch(`/api/admin/weekly-events/${params.id}`, { cache: 'no-store' });
       if (!res.ok) { setErr('No encontrado'); return; }
       setItem(await res.json());
     })();
@@ -40,6 +40,7 @@ export default function EditWeeklyEventPage() {
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(data),
               });
+              console.log(res);
               if (!res.ok) throw new Error('No se pudo guardar');
               router.push('/admin/events/weekly');
             }}

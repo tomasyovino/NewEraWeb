@@ -8,8 +8,13 @@ export default function AdminWorldList() {
   const [items, setItems] = useState<WorldEvent[] | null>(null);
 
   const load = async () => {
-    const res = await fetch('/api/admin/world-events', { cache: 'no-store' });
-    setItems(await res.json());
+    try {
+      const res = await fetch('/api/admin/world-events', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Error al cargar');
+      setItems(await res.json());
+    } catch {
+      setItems([]);
+    }
   };
   useEffect(() => { load(); }, []);
 
@@ -42,13 +47,18 @@ export default function AdminWorldList() {
                     const s = Date.parse(ev.startsAt);
                     const e = Date.parse(ev.endsAt);
                     const state = now < s ? 'upcoming' : now > e ? 'finished' : 'live';
+                    const stateLabel = state === 'live'
+                      ? 'En curso'
+                      : state === 'upcoming'
+                      ? 'Próximo'
+                      : 'Finalizado';
                     return (
                       <div key={ev.id} className="list-soft">
                         <div className="flex items-center justify-between p-2">
                           <div className="flex flex-col">
                             <strong>{ev.name.es} <span style={{color:'var(--muted)'}}>/ {ev.name.en}</span></strong>
                             <span className="note">
-                              {new Date(ev.startsAt).toLocaleString()} → {new Date(ev.endsAt).toLocaleString()} · {state}{ev.featured?' · ★':''}
+                              {new Date(ev.startsAt).toLocaleString()} → {new Date(ev.endsAt).toLocaleString()} · {stateLabel}{ev.featured?' · ★':''}
                             </span>
                           </div>
                           <div className="flex gap-2">

@@ -13,7 +13,7 @@ export default function EditWorldEventPage() {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`/api/admin/world-events/${params.id}`);
+      const res = await fetch(`/api/admin/world-events/${params.id}`, { cache: 'no-store' });
       if (!res.ok) { setErr('No encontrado'); return; }
       setItem(await res.json());
     })();

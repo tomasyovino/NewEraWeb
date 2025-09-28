@@ -23,7 +23,7 @@ export const weeklyEventSchema = z.object({
   id: z.string(),
   name: localizedStringSchema,
   description: localizedStringSchema.optional(),
-  dayOfWeek: z.number().int().min(0).max(6),
+  dayOfWeek: z.number().int().min(1).max(7),
   times: z.array(z.string().regex(hhmm)).min(1),
   durationMinutes: z.number().int().positive().optional(),
   featured: z.boolean().optional(),

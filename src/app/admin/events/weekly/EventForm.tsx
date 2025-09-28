@@ -2,24 +2,41 @@
 
 import { useState } from 'react';
 import { z } from 'zod';
-import { weeklyEventSchema } from '@/lib/schemas';
 import type { WeeklyEvent } from '@/lib/types';
 
-const timeRe = /^([01]\d|2[0-3]):[0-5]\d$/;
-
-const formSchema = weeklyEventSchema.extend({
-    id: z.string().optional(),
-});
+const timeRe = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
 const DAYS = [
-    { v: 0, es: 'Domingo', en: 'Sunday' },
-    { v: 1, es: 'Lunes', en: 'Monday' },
-    { v: 2, es: 'Martes', en: 'Tuesday' },
-    { v: 3, es: 'Miércoles', en: 'Wednesday' },
-    { v: 4, es: 'Jueves', en: 'Thursday' },
-    { v: 5, es: 'Viernes', en: 'Friday' },
-    { v: 6, es: 'Sábado', en: 'Saturday' },
+    { v: 1, es: 'Lunes',    en: 'Monday'    },
+    { v: 2, es: 'Martes',   en: 'Tuesday'   },
+    { v: 3, es: 'Miércoles',en: 'Wednesday' },
+    { v: 4, es: 'Jueves',   en: 'Thursday'  },
+    { v: 5, es: 'Viernes',  en: 'Friday'    },
+    { v: 6, es: 'Sábado',   en: 'Saturday'  },
+    { v: 7, es: 'Domingo',  en: 'Sunday'    },
 ];
+
+const formSchema = z.object({
+    id: z.string().optional(),
+    name: z.object({
+        es: z.string().min(1, 'Nombre ES requerido'),
+        en: z.string().min(1, 'Name EN requerido'),
+    }),
+    description: z
+        .object({
+        es: z.string().optional(),
+        en: z.string().optional(),
+        })
+        .optional(),
+    dayOfWeek: z.number().int().min(1).max(7),
+    times: z
+        .array(z.string().regex(timeRe, 'Formato HH:mm'))
+        .min(1, 'Agrega al menos un horario')
+        .refine((arr) => new Set(arr).size === arr.length, 'Horarios duplicados'),
+    durationMinutes: z.number().int().min(0).optional(),
+    featured: z.boolean(),
+    icon: z.string().url().or(z.string().min(1)).optional(),
+});
 
 export type EventFormProps = {
     initial?: WeeklyEvent;
@@ -47,7 +64,7 @@ export default function EventForm({ initial, onSubmit, submitLabel = 'Guardar' }
         const t = timeInput.trim();
         if (!timeRe.test(t)) { setErr('Hora inválida (usa HH:mm)'); return; }
         if (data.times.includes(t)) return;
-        setData({ ...data, times: [...data.times, t].sort() });
+        setData({ ...data, times: [...data.times, t].sort((a,b)=>a.localeCompare(b)) });
         setTimeInput('');
         setErr(null);
     };
@@ -101,7 +118,7 @@ export default function EventForm({ initial, onSubmit, submitLabel = 'Guardar' }
                 ...d,
                 description: {
                     es: e.target.value,
-                    en: d.description?.en ?? '',   // aseguramos EN
+                    en: d.description?.en ?? '',
                 },
                 }))
             }
@@ -118,7 +135,7 @@ export default function EventForm({ initial, onSubmit, submitLabel = 'Guardar' }
                 setData(d => ({
                 ...d,
                 description: {
-                    es: d.description?.es ?? '',   // aseguramos ES
+                    es: d.description?.es ?? '',
                     en: e.target.value,
                 },
                 }))
@@ -131,7 +148,7 @@ export default function EventForm({ initial, onSubmit, submitLabel = 'Guardar' }
         <div className="grid md:grid-cols-3 gap-3">
             <label className="grid gap-1">
             <span>Día de la semana</span>
-            <select className="input" value={data.dayOfWeek}
+            <select className="input admin-select" value={data.dayOfWeek}
                 onChange={e => setData({ ...data, dayOfWeek: Number(e.target.value) })}>
                 {DAYS.map(d => <option key={d.v} value={d.v}>{d.es} / {d.en}</option>)}
             </select>
@@ -139,13 +156,13 @@ export default function EventForm({ initial, onSubmit, submitLabel = 'Guardar' }
 
             <label className="grid gap-1">
             <span>Duración (min)</span>
-            <input className="input" type="number" min={0} value={data.durationMinutes ?? 0}
+            <input className="input admin-select" type="number" min={0} value={data.durationMinutes ?? 0}
                 onChange={e => setData({ ...data, durationMinutes: Number(e.target.value || 0) })} />
             </label>
 
             <label className="grid gap-1">
             <span>Destacado</span>
-            <select className="input" value={data.featured ? '1' : '0'}
+            <select className="input admin-select" value={data.featured ? '1' : '0'}
                 onChange={e => setData({ ...data, featured: e.target.value === '1' })}>
                 <option value="0">No</option>
                 <option value="1">Sí</option>
@@ -155,7 +172,7 @@ export default function EventForm({ initial, onSubmit, submitLabel = 'Guardar' }
 
         {/* Icono opcional */}
         <label className="grid gap-1">
-            <span>Icono (opcional, nombre o URL)</span>
+            <span>Icono (opcional, URL)</span>
             <input className="input" value={data.icon ?? ''}
             onChange={e => setData({ ...data, icon: e.target.value || undefined })} />
         </label>
@@ -176,7 +193,7 @@ export default function EventForm({ initial, onSubmit, submitLabel = 'Guardar' }
             <div className="flex flex-wrap gap-2">
             {data.times.map(t => (
                 <span key={t} className="chip" style={{ cursor: 'pointer' }} onClick={() => delTime(t)} title="Quitar">
-                {t} ×
+                {t} x
                 </span>
             ))}
             {data.times.length === 0 && <span className="note">No hay horarios añadidos.</span>}

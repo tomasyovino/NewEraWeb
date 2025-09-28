@@ -19,20 +19,19 @@ export default async function HomePage({ params }: { params: { lang: string } })
   const today = await getTodayEventSlots();
   const weekly = await getWeeklyAgendaSlots();
   const worldEvents = await getWorldEvents();
-  const sentences = buildTodaySentences(today, lang);
 
   const NEXT_PUBLIC_DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_URL || 'https://discord.com';
   const NEXT_PUBLIC_WIKI_URL = process.env.NEXT_PUBLIC_WIKI_URL || '';
   const DL_WIN = process.env.NEXT_PUBLIC_DOWNLOAD_URL_WIN || '#';
   const DL_MAC = process.env.DOWNLOAD_URL_MAC || '';
 
-  const dayNamesES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  const dayNamesEN = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const dayNamesES = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const dayNamesEN = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   const dayNames = lang === 'es' ? dayNamesES : dayNamesEN;
 
   const grouped: Record<number, typeof weekly> = {};
   for (const s of weekly) (grouped[s.dayOfWeek] ||= []).push(s);
-  const order = [1,2,3,4,5,6,0];
+  const order = [1,2,3,4,5,6,7];
 
   return (
     <>
@@ -95,9 +94,9 @@ export default async function HomePage({ params }: { params: { lang: string } })
                 <>
                   <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 mt-2">
                     {daysWith.map((dIdx) => (
-                      <div key={dIdx} className="tile">
+                      <div key={dIdx - 1} className="tile">
                         <div className="tile-cta">
-                          <h3>{dayNames[dIdx]}</h3>
+                          <h3>{dayNames[dIdx - 1]}</h3>
                           <span className="chip">
                             {grouped[dIdx].length}{' '}
                             {lang === 'es' ? 'eventos' : 'events'}
