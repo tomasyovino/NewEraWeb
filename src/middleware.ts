@@ -1,5 +1,20 @@
 import { NextResponse, NextRequest } from 'next/server';
 
+const SUPPORTED = new Set(['es', 'en']);
+const FALLBACK = 'es';
+
+function detectLang(req: NextRequest): string {
+  const c = req.cookies.get('lang')?.value;
+  if (c && SUPPORTED.has(c)) return c;
+
+  const al = req.headers.get('accept-language') ?? '';
+  const first = al.split(',')[0]?.trim().toLowerCase();
+  if (first?.startsWith('es')) return 'es';
+  if (first?.startsWith('en')) return 'en';
+
+  return FALLBACK;
+}
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
@@ -13,6 +28,15 @@ export function middleware(req: NextRequest) {
     pathname === '/admin/login'
   ) {
     return NextResponse.next();
+  }
+
+  if (pathname === '/') {
+    const lang = detectLang(req);
+    const url = req.nextUrl.clone();
+    url.pathname = `/${lang}`;
+    const res = NextResponse.redirect(url);
+    res.cookies.set('lang', lang, { path: '/', sameSite: 'lax' });
+    return res;
   }
 
   const protects =
@@ -36,5 +60,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin', '/admin/:path*', '/api/admin/:path*'],
+  matcher: ['/', '/admin', '/admin/:path*', '/api/admin/:path*'],
 };
