@@ -44,27 +44,23 @@ export default function DonationBrowser({
   packs?: Pack[];
   lang: Locale;
 }) {
-  // vista (items / packs)
   const [view, setView] = useState<ViewMode>('items');
 
-  // categorías disponibles (solo en items)
   const categories = useMemo(() => {
     const set = new Set<string>();
     for (const it of items) set.add(it.category);
     return Array.from(set).sort();
   }, [items]);
 
-  // estado UI
   const [activeCats, setActiveCats] = useState<string[]>([]);
   const [currency, setCurrency] = useState<Currency>('eur');
   const [onlyWithCurrency, setOnlyWithCurrency] = useState(false);
   const [onlySpecial, setOnlySpecial] = useState(false);
   const [sortDir, setSortDir] = useState<'asc'|'desc'>('asc');
   const [q, setQ] = useState('');
-  const [scope, setScope] = useState<ScopeTab>('all'); // <- sub-tabs
-  const [showFilters, setShowFilters] = useState(false); // móvil: colapsar switches
+  const [scope, setScope] = useState<ScopeTab>('all');
+  const [showFilters, setShowFilters] = useState(false);
 
-  // filtro por scope (para items)
   const scopeAllow = (s: 'personal'|'clan'|'both') => {
     if (scope === 'all') return true;
     if (scope === 'personal') return s === 'personal' || s === 'both';
@@ -72,7 +68,6 @@ export default function DonationBrowser({
     return true;
   };
 
-  // derivado con filtros/orden (items)
   const filteredItems = useMemo(() => {
     if (view !== 'items') return [];
     let out = items.slice();
@@ -104,7 +99,6 @@ export default function DonationBrowser({
     return out;
   }, [view, items, activeCats, currency, onlyWithCurrency, onlySpecial, sortDir, q, lang, scope]);
 
-  // packs (texto, orden por moneda elegida, “onlyWithCurrency”)
   const filteredPacks = useMemo(() => {
     if (view !== 'packs') return [];
     let out = packs.slice();
@@ -135,11 +129,13 @@ export default function DonationBrowser({
     return out;
   }, [view, packs, q, onlyWithCurrency, currency, sortDir, lang]);
 
-  // reset de categorías al pasar a packs
   const goView = (next: ViewMode) => {
     setView(next);
     if (next === 'packs') setActiveCats([]);
   };
+
+  const resolveDonationName = (id: string, lang: Locale) =>
+    items.find(d => d.id === id)?.name[lang];
 
   return (
     <div className="donations-layout">
@@ -331,7 +327,7 @@ export default function DonationBrowser({
           ) : (
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 items-stretch donations-grid">
               {filteredPacks.map(p => (
-                <PackCard key={p.id} pack={p} lang={lang} />
+                <PackCard key={p.id} pack={p} lang={lang} resolveDonationName={resolveDonationName} />
               ))}
             </div>
           )

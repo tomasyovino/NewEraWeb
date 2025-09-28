@@ -618,3 +618,73 @@ html { scroll-behavior: smooth; }
 @media (min-width: 1280px){
   .donation-card2__hero{ height: 200px; }
 }
+
+/* Base */
+.pack-card2 { padding:0; overflow:hidden; display:flex; flex-direction:column; }
+
+/* HERO */
+.pack-card2__hero{
+  position: relative;
+  height: 180px;
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  background-size: cover; background-position: center;
+  border-bottom: 1px solid var(--stroke);
+}
+.pack-card2__scrim{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(0,0,0,.20), transparent 60%) ,
+    linear-gradient(180deg, rgba(0,0,0,.10) 0%, rgba(0,0,0,.35) 70%, rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+}
+.pack-card2__overlay{
+  position:absolute; left:0; right:0; bottom:0;
+  padding:10px 14px;
+  background: linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.55));
+  backdrop-filter: blur(1.2px);
+}
+.pack-card2__title{
+  font-weight:800; line-height:1.15; margin:0; color:#fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,.6), 0 1px 2px rgba(0,0,0,.75);
+}
+
+/* Skeleton */
+.skeleton{ position:absolute; inset:0; background:#1a1a1a; opacity:.35; border-bottom:1px solid var(--stroke); }
+.shimmer{
+  --shine: linear-gradient(100deg, transparent 0%, rgba(255,255,255,.12) 40%, transparent 80%);
+  background-image: var(--shine); background-size: 200% 100%;
+  animation: shimmer 1.2s infinite linear;
+}
+@keyframes shimmer { 0%{background-position:-120% 0} 100%{background-position:120% 0} }
+.pack-card2__hero.is-loading { filter: saturate(.9) contrast(.95); }
+.pack-card2__hero.is-loaded  { transition: filter .25s ease; filter: none; }
+
+/* BODY */
+.pack-card2__body{
+  padding: 12px 14px 14px;
+  display: grid; grid-auto-rows: min-content; gap: 8px;
+}
+.pack-card2__meta{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+}
+.pack-card2__tags{ display:flex; gap:6px; flex-wrap:wrap; min-height:28px; }
+.pack-card2__prices{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+
+.pack-card2__desc{
+  color: var(--muted);
+  line-height: 1.4;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pack-card2__footer{
+  margin-top: 4px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+
+@media (min-width:1280px){
+  .pack-card2__hero{ height:200px; }
+}

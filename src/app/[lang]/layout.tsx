@@ -29,7 +29,6 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        {/* Fondo atmosférico */}
         <div className="bg-scene"></div>
         <div className="bg-dots"></div>
         <div className="vignette"></div>
@@ -66,7 +65,6 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
         </div>
 
         <main className="main-pad">
-          {/* por ahora no ponemos contenido; sólo estructura */}
           <div className="container">
             {children}
           </div>
