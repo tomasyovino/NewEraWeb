@@ -15,9 +15,6 @@ export default function AdminLoginPage() {
             method="post"
             className="grid gap-3 mt-4"
           >
-            {/* Si quieres preservar el destino */}
-            {/* <input type="hidden" name="next" value="/admin" /> */}
-
             <label className="grid gap-1">
               <span>Usuario</span>
               <input name="username" className="input" required />
