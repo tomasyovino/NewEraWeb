@@ -37,7 +37,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
   return (
     <>
       {/* HERO */}
-      <section id="hero" className="section">
+      <section id="hero" className="section section--hero">
         <div className="container">
           <Reveal>
             <div className="hero">
@@ -60,7 +60,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
       </section>
 
       {/* EVENTS */}
-      <section id="events" className="section">
+      <section id="events" className="section section--events mt-6">
         <div className="container">
           <Reveal><h2 className="section-title">{lang==='es' ? 'Eventos' : 'Events'}</h2></Reveal>
 
@@ -128,7 +128,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
       </section>
 
       {/* COMMUNITY (Discord / Wiki) */}
-      <section id="community" className="section">
+      <section id="community" className="section section--half mt-6">
         <div className="container">
           <Reveal><h2 className="section-title">{lang==='es' ? 'Comunidad' : 'Community'}</h2></Reveal>
           <Reveal className="mt-4">
@@ -162,7 +162,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
       </section>
 
       {/* DOWNLOAD */}
-      <section id="download" className="section">
+      <section id="download" className="section section--half section--half-last  mb-12">
         <div className="container">
           <Reveal><h2 className="section-title">{lang==='es' ? 'Descargar' : 'Download'}</h2></Reveal>
 

@@ -1,12 +1,14 @@
 import {
-  WeeklyEvent, EventSlot, Donation, ServerStatus, WorldEvent,
+  WeeklyEvent, EventSlot, WorldEvent,
+  Pack,
 } from './types';
 import {
-  weeklyEventListSchema, donationListSchema, serverStatusSchema, worldEventListSchema,
+  weeklyEventListSchema, donationListSchema, worldEventListSchema,
+  packListSchema, 
 } from './schemas';
 import { DEFAULT_TZ } from './constants';
 import { currentWeekday, compareTimeHHmm } from './time';
-import { eventsMock, worldEventsMock, donationsMock, statusMock} from '@/mocks'
+import { eventsMock, worldEventsMock, donationsMock, packsMock} from '@/mocks'
 
 const isServer = typeof window === 'undefined';
 
@@ -36,7 +38,6 @@ async function fetchJson<T>(path: string): Promise<T> {
 
 /* ================== WORLD EVENTS ================== */
 
-// Público (Home): activos o futuros, limitado (default 6)
 export async function getWorldEvents(opts?: { limit?: number; now?: Date }): Promise<WorldEvent[]> {
   const limit = opts?.limit ?? 6;
   const now = opts?.now ?? new Date();
@@ -50,46 +51,8 @@ export async function getWorldEvents(opts?: { limit?: number; now?: Date }): Pro
       .slice(0, Math.max(0, limit));
   }
 
-  const qs = new URLSearchParams({ scope: 'public', limit: String(limit), from: 'now' });
-  const raw = await fetchJson<unknown>(`/api/admin/world-events?${qs.toString()}`);
+  const raw = await fetchJson<unknown>(`/api/world-events`);
   return worldEventListSchema.parse(raw);
-}
-
-// Admin: todo sin filtros
-export async function getWorldEventsAll(): Promise<WorldEvent[]> {
-  if (USE_MOCK) {
-    return worldEventListSchema.parse(worldEventsMock as unknown);
-  }
-  const raw = await fetchJson<unknown>('/api/admin/world-events');
-  return worldEventListSchema.parse(raw);
-}
-
-export async function getActiveWorldEvents(now: Date = new Date()): Promise<WorldEvent[]> {
-  const all = await getWorldEvents({ now, limit: 999 });
-  return all
-    .filter(ev => {
-      const s = Date.parse(ev.startsAt);
-      const e = Date.parse(ev.endsAt);
-      const t = now.getTime();
-      return t >= s && t <= e;
-    })
-    .sort((a, b) => Date.parse(a.endsAt) - Date.parse(b.endsAt));
-}
-
-export async function getUpcomingWorldEvents(limit?: number, now: Date = new Date()): Promise<WorldEvent[]> {
-  const all = await getWorldEvents({ now, limit: 999 });
-  const up = all
-    .filter(ev => Date.parse(ev.startsAt) > now.getTime())
-    .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt));
-  return typeof limit === 'number' ? up.slice(0, Math.max(0, limit)) : up;
-}
-
-export async function getFeaturedWorldEvent(now: Date = new Date()): Promise<WorldEvent | undefined> {
-  const active = await getActiveWorldEvents(now);
-  const featActive = active.find(e => e.featured);
-  if (featActive) return featActive;
-  const upcoming = await getUpcomingWorldEvents(5, now);
-  return upcoming.find(e => e.featured) ?? upcoming[0];
 }
 
 /* ================== WEEKLY EVENTS ================== */
@@ -98,7 +61,7 @@ export async function getWeeklyEvents(): Promise<WeeklyEvent[]> {
   if (USE_MOCK) {
     return weeklyEventListSchema.parse(eventsMock as unknown);
   }
-  const raw = await fetchJson<unknown>('/api/admin/weekly-events');
+  const raw = await fetchJson<unknown>('/api/weekly-events');
   return weeklyEventListSchema.parse(raw);
 }
 
@@ -146,24 +109,17 @@ export async function getWeeklyAgendaSlots(): Promise<EventSlot[]> {
 
 /* ================== DONATIONS / STATUS ================== */
 
-export async function getDonations(): Promise<Donation[]> {
+export async function getDonations() {
   if (USE_MOCK) {
-    try {
-      return donationListSchema.parse(donationsMock as unknown);
-    } catch { return []; }
+    return donationListSchema.parse(donationsMock as unknown);
   }
   const raw = await fetchJson<unknown>('/api/donations');
   return donationListSchema.parse(raw);
 }
 
-export async function getStatus(): Promise<ServerStatus> {
+export async function getPacks(): Promise<Pack[]> {
   if (USE_MOCK) {
-    try {
-      return serverStatusSchema.parse(statusMock as unknown);
-    } catch {
-      return serverStatusSchema.parse({ online: true, players: 0, peak24h: 0, message: null });
-    }
+    return packListSchema.parse(packsMock as unknown);
   }
-  const raw = await fetchJson<unknown>('/api/status');
-  return serverStatusSchema.parse(raw);
+  return packListSchema.parse(await fetchJson<unknown>('/api/packs'));
 }

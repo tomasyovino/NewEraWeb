@@ -29,25 +29,6 @@ export type EventSlot = {
   icon?: string;
 };
 
-export type DonationCategory = 'cosmetic'|'mount'|'house'|'utility'|'other';
-
-export type Donation = {
-  id: string;
-  name: LocalizedString;
-  description?: LocalizedString;
-  price: { currency: 'EUR'; amount: number };
-  category?: DonationCategory;
-  image?: string;
-};
-
-export type ServerStatus = {
-  online: boolean;
-  playersOnline: number;
-  maxPlayers: number;
-  uptimeMinutes: number;
-  lastRestartIso?: string;
-};
-
 export interface WorldEvent {
   id: string;
   name: LocalizedString;
@@ -62,3 +43,62 @@ export interface WorldEvent {
   rewards?: LocalizedString[];
   warnings?: LocalizedString[];
 }
+
+export type DonationScope = 'personal' | 'clan' | 'both';
+
+export type DonationCategory =
+  | 'item'
+  | 'mount'
+  | 'stat_boost'
+  | 'land_mine'
+  | 'land_house'
+  | 'currency_ne'
+  | 'currency_ne_fake';
+
+export interface DonationPrice {
+  eur?: number;
+  ne?: number;
+  neFake?: number;
+}
+
+export interface DonationLimits {
+  perAccount?: number;
+  perClan?: number;
+  cooldownDays?: number;
+}
+
+export interface Donation {
+  id: string;
+  slug: string;
+  name: LocalizedString;
+  description?: LocalizedString;
+  category: DonationCategory;
+  isSpecial: boolean;
+  showItem: boolean;
+  scope: DonationScope;
+  price: DonationPrice;
+  featured?: boolean;
+  icon?: string;
+  metadata?: Record<string, unknown>;
+  limits?: DonationLimits;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PackItem = {
+  donationId: string;
+  qty?: number;
+};
+
+export type Pack = {
+  id: string;
+  slug: string;
+  name: LocalizedString;
+  description?: LocalizedString;
+  items: PackItem[];
+  price: DonationPrice;
+  featured?: boolean;
+  icon?: string;
+  createdAt: string;
+  updatedAt: string;
+};

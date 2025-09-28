@@ -1,23 +1,971 @@
 [
   {
-    "id": "d1",
-    "name": { "es": "Montura Etérea", "en": "Ethereal Mount" },
-    "description": { "es": "Montura exclusiva", "en": "Exclusive mount" },
-    "price": { "currency": "EUR", "amount": 10 },
-    "category": "mount"
+    "id": "000000001",
+    "slug": "robe-000000001",
+    "name": { "es": "Robe de Muerto o Robe Normal", "en": "Dead Man's Robe or Normal Robe" },
+    "description": { "es": "Paquete de 1000 monedas New Era.", "en": "Pack of 1000 New Era coins." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "featured": false,
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Indestructible", "Pintable" ],
+      "en": [ "Inloot", "Indestructible", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
   },
   {
-    "id": "d2",
-    "name": { "es": "Tintura rara", "en": "Rare Dye" },
-    "description": { "es": "Color único para tu ropa", "en": "Unique color for your outfit" },
-    "price": { "currency": "EUR", "amount": 5 },
-    "category": "cosmetic"
+    "id": "000000002",
+    "slug": "apron-000000002",
+    "name": { "es": "Delantal", "en": "Apron" },
+    "description": { "es": "Moneda alternativa con usos limitados.", "en": "Alternative coin with limited uses." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Indestructible", "Pintable" ],
+      "en": [ "Inloot", "Indestructible", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
   },
   {
-    "id": "d3",
-    "name": { "es": "Casa pequeña", "en": "Small House" },
-    "description": { "es": "Lote básico", "en": "Basic plot" },
-    "price": { "currency": "EUR", "amount": 25 },
-    "category": "house"
+    "id": "000000003",
+    "slug": "shield-000000003",
+    "name": { "es": "Escudo", "en": "Shield" },
+    "description": { "es": "Espada rara con bonificación de daño elemental.", "en": "Rare sword with elemental damage bonus." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Indestructible", "Pintable", "+35 Armadura" ],
+      "en": [ "Inloot", "Indestructible", "Paintable", "+35 Armor" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000004",
+    "slug": "alchemist-glows-000000004",
+    "name": { "es": "Guantes de Alquimista", "en": "Glows of Alchemist" },
+    "description": { "es": "Incrementa fuerza base hasta el cap permitido.", "en": "Increases base STR up to the allowed cap." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Indestructible", "Pintable", "+10 Alquimia" ],
+      "en": [ "Inloot", "Indestructible", "Paintable", "+10 Alchemy" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000005",
+    "slug": "carpenter-glows-000000005",
+    "name": { "es": "Guantes de Carpintero", "en": "Carpenter's Glows" },
+    "description": { "es": "Terreno para base de clan en zona segura.", "en": "Plot for a clan base in a safe area." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Indestructible", "Pintable", "+10 Carpintería" ],
+      "en": [ "Inloot", "Indestructible", "Paintable", "+10 Carpentry" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000006",
+    "slug": "blacksmith-hammer-000000006",
+    "name": { "es": "Martillo de Herrero", "en": "Blacksmith's Hammer" },
+    "description": { "es": "Acceso exclusivo a una veta con recursos aumentados.", "en": "Exclusive access to a rich vein with boosted yields." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Indestructible", "Pintable", "+10 Herrería" ],
+      "en": [ "Inloot", "Indestructible", "Paintable", "+10 Blacksmith" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000007",
+    "slug": "miner-pickaxe-000000007",
+    "name": { "es": "Pico de Minero", "en": "Miner's Pickaxe" },
+    "description": { "es": "Acceso exclusivo a una veta con recursos aumentados.", "en": "Exclusive access to a rich vein with boosted yields." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Indestructible", "Pintable", "+10 Minería" ],
+      "en": [ "Inloot", "Indestructible", "Paintable", "+10 Mining" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000008",
+    "slug": "taming-rod-000000008",
+    "name": { "es": "Vara de Domar", "en": "Taming Rod" },
+    "description": { "es": "Acceso exclusivo a una veta con recursos aumentados.", "en": "Exclusive access to a rich vein with boosted yields." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Indestructible", "Pintable", "+10 Domar" ],
+      "en": [ "Inloot", "Indestructible", "Paintable", "+10 Tame" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000009",
+    "slug": "special-tub-000000009",
+    "name": { "es": "Tub Especial", "en": "Special Tub" },
+    "description": { "es": "¡Existen más de 400 colores entre los que podrás elegir un color y tenerlo para pintar tus objetos siempre!", "en": "There are over 400 colors to choose from and always have them to paint your items!" },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Infinito" ],
+      "en": [ "Inloot", "Infinite" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000010",
+    "slug": "stylish-scissors-000000010",
+    "name": { "es": "Tijeras con Estilo", "en": "Stylish Scissors" },
+    "description": { "es": "Manten tu estilo con el mejor corte de Pelo y Barba cambiandolo cada vez que quieras.", "en": "Maintain your style with the best haircut and beard, changing it whenever you want." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 7, "ne": 700 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000011",
+    "slug": "hair-dye-000000011",
+    "name": { "es": "Tinte para el Pelo", "en": "Hair Dye" },
+    "description": { "es": "¡Cambia el estilo de tu personaje pintando su pelo del color que desees!", "en": "Change your character's style by painting their hair any color you want!" },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 1, "ne": 100 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable", "1 Uso" ],
+      "en": [ "Inloot", "Paintable", "1 Use" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000012",
+    "slug": "key-holder-000000012",
+    "name": { "es": "Portallaves", "en": "Key Holder" },
+    "description": { "es": "Guarda tus llaves con el mayor de los estilos, pintalo de un color brillante y así siempre lo tendrás localizado.", "en": "Store your keys in style, paint them a bright color, and you'll always have them located." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 2, "ne": 200 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000013",
+    "slug": "change-helmets-000000013",
+    "name": { "es": "Cambia Cascos", "en": "Change Helmets" },
+    "description": { "es": "Elige la apariencia para tu casco, accederas a un menú en el que obtendras 2 apariencias a elegir con la compra que cambiaran la apariencia de tu casco (Para añadir más, tendrás que gastar 500 monedas extra por apariencia).", "en": "Choose the appearance for your helmet, you will access a menu in which you will get 2 appearances to choose from with the purchase that will change the appearance of your helmet (To add more, you will have to spend 500 extra coins per appearance)." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000014",
+    "slug": "armor-prism-000000014",
+    "name": { "es": "Prisma de Armadura", "en": "Armor Prism" },
+    "description": { "es": "Cambia el color de tu armadura mientras la tengas equipada", "en": "Changes the color of your armor while you have it equipped" },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000015",
+    "slug": "master-box-000000015",
+    "name": { "es": "Caja Maestra", "en": "Master Box" },
+    "description": { "es": "Organiza mejor tu bolsa guardando tus objetos de NewEra ddentro de la caja maestra.", "en": "Organize your bag better by storing your NewEra items inside the master box." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable", "Intransferible" ],
+      "en": [ "Inloot", "Paintable", "Untransferable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000016",
+    "slug": "special-quiver-000000016",
+    "name": { "es": "Carcaj Especial", "en": "Special Quiver" },
+    "description": { "es": "Almacena tus flechas. También puedes equiparlo o en su defecto elegir cambiar la forma de tu capa a este objeto.", "en": "Stores your arrows. You can also equip it or choose to change your cape shape to this item." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000017",
+    "slug": "combat-ring-000000017",
+    "name": { "es": "Anillo de Combate", "en": "Combat Ring" },
+    "description": { "es": "Descripción.", "en": "Description." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 12, "ne": 1200 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable", "+20 Armadura" ],
+      "en": [ "Inloot", "Paintable", "+20 Armor" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000018",
+    "slug": "combat-earrings-000000018",
+    "name": { "es": "Pendientes de Combate", "en": "Combat Earrings" },
+    "description": { "es": "Descripción.", "en": "Description." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable", "+10 Armadura" ],
+      "en": [ "Inloot", "Paintable", "+10 Armor" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000019",
+    "slug": "regs-portable-warehouse-000000019",
+    "name": { "es": "Almacén Portátil de Regs", "en": "Regs Portable Warehouse" },
+    "description": { "es": "Almacena tus regs.", "en": "Store your regs." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable", "Intransferible" ],
+      "en": [ "Inloot", "Paintable", "Untransferable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000020",
+    "slug": "potions-portable-warehouse-000000020",
+    "name": { "es": "Almacén Portátil de Pociones", "en": "Regs Portable Potions" },
+    "description": { "es": "Almacena tus pociones.", "en": "Store your potions." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 15, "ne": 1500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable", "Intransferible" ],
+      "en": [ "Inloot", "Paintable", "Untransferable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000021",
+    "slug": "mystic-rune-book-000000021",
+    "name": { "es": "Libro de Runas Místico", "en": "Mystic Rune Book" },
+    "description": { "es": "Consigue un libro de runas extra para tus aventuras.", "en": "Get an extra rune book for your adventures." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 15, "ne": 1500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000022",
+    "slug": "dimensional-mount-capsule-000000022",
+    "name": { "es": "Cápsula Dimensional de Monturas", "en": "Dimensional Mount Capsule" },
+    "description": { "es": "Cambia la apariencia de tu montura.", "en": "Change the appearance of your mount" },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 15, "ne": 1500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000023",
+    "slug": "horse-mount-000000023",
+    "name": { "es": "Caballo", "en": "Horse" },
+    "description": { "es": "Descripción.", "en": "Description" },
+    "category": "mount",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 15, "ne": 1500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000024",
+    "slug": "bear-mount-000000024",
+    "name": { "es": "Oso", "en": "Bear" },
+    "description": { "es": "Descripción.", "en": "Description" },
+    "category": "mount",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 15, "ne": 1500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000025",
+    "slug": "llama-mount-000000025",
+    "name": { "es": "Llama", "en": "Llama" },
+    "description": { "es": "Descripción.", "en": "Description" },
+    "category": "mount",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 15, "ne": 1500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000026",
+    "slug": "infernal-horse-mount-000000026",
+    "name": { "es": "Caballo Infernal", "en": "Infernal Horse" },
+    "description": { "es": "Descripción.", "en": "Description" },
+    "category": "mount",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 25, "ne": 2500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000027",
+    "slug": "infernal-bear-mount-000000027",
+    "name": { "es": "Oso Infernal", "en": "Infernal Bear" },
+    "description": { "es": "Descripción.", "en": "Description" },
+    "category": "mount",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 25, "ne": 2500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000028",
+    "slug": "infernal-llama-mount-000000028",
+    "name": { "es": "Llama Infernal", "en": "Infernal Llama" },
+    "description": { "es": "Descripción.", "en": "Description" },
+    "category": "mount",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 25, "ne": 2500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000029",
+    "slug": "portable-bank-000000029",
+    "name": { "es": "Banco Portátil", "en": "Portable Bank" },
+    "description": { "es": "Accede a tu banco desde cualquiero sitio donde te encuentres.", "en": "Access your bank from wherever you are." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 30, "ne": 3000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000030",
+    "slug": "wings-000000030",
+    "name": { "es": "Alas", "en": "Wings" },
+    "description": { "es": "Equipa tu personaje con unas increibles Alas de Gargola (accederas a un menu y tu eligiras si las equipas o en su defecto cambias tu capa de forma).", "en": "Equip your character with some incredible Gargoyle Wings (you will access a menu and you will choose whether to equip them or change your shape cape)." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 30, "ne": 3000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000031",
+    "slug": "anti-magic-field-bracelet-000000031",
+    "name": { "es": "Pulsera de Campo Anti-Magia", "en": "Anti-Magic Field Bracelet" },
+    "description": { "es": "Descripción.", "en": "Description." },
+    "category": "item",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 30, "ne": 3000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable", "+20 Resistencia Mágica" ],
+      "en": [ "Inloot", "Paintable", "+20 Magic Resist" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000032",
+    "slug": "craftman-gloves-power-creator-000000032",
+    "name": { "es": "Guantes del Artesano: La fuerza del Creador", "en": "Craftsman's Gloves: The Power of the Creator" },
+    "description": { "es": "En las forjas más antiguas y en los talleres de los más hábiles artesanos, se cuenta la leyenda de unos guantes imbuidos con una fuerza sin igual. Los Guantes del Artesano, una reliquia que concede un poder sobrehumano a su protador, permitiéndole moldear materiales con una precisión y fuerza que ninguna otra herramienta puede igualar.", "en": "In the oldest forges and in the workshops of the most skilled artisans, legends tell of gloves imbued with unparalleled strength. The Craftsman's Gloves, a relic that grants superhuman power to its wearer, allowing them to shape materials with a precision and strength that no other tool can match." },
+    "category": "item",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 15, "ne": 1500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "+50 Fuerza", "No puede ser usado en combate" ],
+      "en": [ "Inloot", "+50 Strenght", "Cannot be used in combat" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000033",
+    "slug": "clan-stone-mounts-000000033",
+    "name": { "es": "Piedra de Clan: Monturas", "en": "Clan Stone: Mounts" },
+    "description": { "es": "Permite a los miembros invocar monturas exclusivas del clan.", "en": "Allows members to summon clan-exclusive mounts." },
+    "category": "item",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "clan",
+    "price": {},
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000034",
+    "slug": "clan-stone-shields-000000034",
+    "name": { "es": "Piedra de Clan: Escudos", "en": "Clan Stone: Shields" },
+    "description": { "es": "Permite a los miembros invocar escudos exclusivos del clan.", "en": "Allows members to summon clan-exclusive shields." },
+    "category": "item",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "clan",
+    "price": {},
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable" ],
+      "en": [ "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000035",
+    "slug": "clan-stone-combat-earrings-000000035",
+    "name": { "es": "Piedra de Clan: Pendientes de Combate", "en": "Clan Stone: Combat Earrings" },
+    "description": { "es": "Permite a los miembros invocar penditentes de combate exclusivos del clan.", "en": "Allows members to summon clan-exclusive combat earrings." },
+    "category": "item",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "clan",
+    "price": {},
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot", "Pintable", "+15 Armadura" ],
+      "en": [ "Inloot", "Paintable", "+15 Armor" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000036",
+    "slug": "personal-mines-small-000000036",
+    "name": { "es": "Minas: Pequeña", "en": "Mines: Small" },
+    "description": { "es": "Perfecta para un solo minero o una pequeña sociedad.", "en": "Perfect for a single miner or a small company." },
+    "category": "land_mine",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": {},
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Acceso Limitado", "Lugar Seguro" ],
+      "en": [ "Limited Access", "Safe Zone" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000037",
+    "slug": "personal-mines-medium-000000037",
+    "name": { "es": "Minas: Mediana", "en": "Mines: Medium" },
+    "description": { "es": "Equilibrada entre espacio y recursos.", "en": "Balanced between space and resources." },
+    "category": "land_mine",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": {},
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Acceso Limitado", "Lugar Seguro" ],
+      "en": [ "Limited Access", "Safe Zone" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000038",
+    "slug": "personal-mines-big-000000038",
+    "name": { "es": "Minas: Grande", "en": "Mines: Big" },
+    "description": { "es": "Para los más ambiciosos, capaz de sostener a varios mineros simultáneamente.", "en": "For the most ambitious, capable of supporting several miners simultaneously." },
+    "category": "land_mine",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": {},
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Acceso Limitado", "Lugar Seguro" ],
+      "en": [ "Limited Access", "Safe Zone" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000039",
+    "slug": "clan-mines-small-000000039",
+    "name": { "es": "Minas: Pequeña", "en": "Mines: Small" },
+    "description": { "es": "Perfecta para un solo minero o una pequeña sociedad.", "en": "Perfect for a single miner or a small company." },
+    "category": "land_mine",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "clan",
+    "price": {},
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Acceso Limitado", "Lugar Seguro" ],
+      "en": [ "Limited Access", "Safe Zone" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000040",
+    "slug": "clan-mines-medium-000000040",
+    "name": { "es": "Minas: Mediana", "en": "Mines: Medium" },
+    "description": { "es": "Equilibrada entre espacio y recursos.", "en": "Balanced between space and resources." },
+    "category": "land_mine",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "clan",
+    "price": {},
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Acceso Limitado", "Lugar Seguro" ],
+      "en": [ "Limited Access", "Safe Zone" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000041",
+    "slug": "clan-mines-big-000000041",
+    "name": { "es": "Minas: Grande", "en": "Mines: Big" },
+    "description": { "es": "Para los más ambiciosos, capaz de sostener a varios mineros simultáneamente.", "en": "For the most ambitious, capable of supporting several miners simultaneously." },
+    "category": "land_mine",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "clan",
+    "price": {},
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Acceso Limitado", "Lugar Seguro" ],
+      "en": [ "Limited Access", "Safe Zone" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000042",
+    "slug": "dimensional-bags-000000042",
+    "name": { "es": "Bolsas Dimensionales", "en": "Dimensional Bags" },
+    "description": { "es": "Un objeto místico y altamente codiciado entre aventureros y comerciantes. Estas bolsas encantadas han sido creadas con una poderosa magia arcana, permitiendo la transferencia instantánea de recursos entre ellas, sin importar la distancia.", "en": "A mystical and highly coveted item among adventurers and merchants, these enchanted bags have been crafted with powerful arcane magic, allowing for the instant transfer of resources between them, regardless of distance." },
+    "category": "item",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 20, "ne": 2000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Transferencia de Recursos", "Espacio Interdimensional", "Conexión Entre Bolsas", "Uso Exclusivo" ],
+      "en": [ "Resource Transfer", "Interdimensional Space", "Connection Between Exchanges", "Exclusive Use" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000043",
+    "slug": "name-change-000000043",
+    "name": { "es": "Cambio de Nombre", "en": "Name Change" },
+    "description": { "es": "Modifica el nombre de tu personaje.", "en": "Change your character's name." },
+    "category": "stat_boost",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000044",
+    "slug": "name-and-nickname-000000044",
+    "name": { "es": "Nombre y Apodo", "en": "Name and Nickname" },
+    "description": { "es": "Personaliza aún más agregando un apodo.", "en": "Personalize further by adding a nickname." },
+    "category": "stat_boost",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000045",
+    "slug": "craftman-toolbox-000000045",
+    "name": { "es": "Caja de Herramientas del Artesano", "en": "Craftsman's Toolbox" },
+    "description": { "es": "¡El complemento perfecto para todo artesano! Esta caja contiene todas las herrameintas esenciales para las profesiones de crafteo en un solo lugar.", "en": "The perfect accessory for every crafter! This box contains all the essential tools for crafting professions in one place." },
+    "category": "item",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 12, "ne": 1200 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Pintable", "Sin Peso" ],
+      "en": [ "Paintable", "Weightless" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000046",
+    "slug": "tome-magic-lost-time-000000046",
+    "name": { "es": "Tomo de Magia Perdido en el Tiempo", "en": "Tome of Magic Lost in Time" },
+    "description": { "es": "Un artefacto arcano olvidado por los siglos... ha vuelto a surgir, y solo los valientes podrán desatar su poder.", "en": "An arcane artifact forgotten for centuries... has resurfaced, and only the brave can unleash its power." },
+    "category": "item",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 20, "ne": 2000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "+10 Inteligencia", "+20 Magia", "Pintable" ],
+      "en": [ "+10 Intelligence", "+20 Magic", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000047",
+    "slug": "infinite-hair-dye-000000047",
+    "name": { "es": "Tintador de Pelo Infinito", "en": "Infinite Hair Dye" },
+    "description": { "es": "¡Cambia tu look sin límites!", "en": "Change your look without limits!" },
+    "category": "item",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "No se consume", "Usos ilimitados", "Inloot", "Pintable" ],
+      "en": [ "No consumption", "Unlimited uses", "Inloot", "Paintable" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000048",
+    "slug": "rune-analyzer-000000048",
+    "name": { "es": "Analizador de Runas", "en": "Rune Analyzer" },
+    "description": { "es": "Con el Analizador de Runas podrás ver las runas equipadas de cualquier jugador. Sí, has leído bien: TODAS SUS RUNAS.", "en": "With the Rune Analyzer, you can see any player's equipped runes. Yes, you read that right: ALL OF THEIR RUNES." },
+    "category": "item",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 5, "ne": 500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Inloot" ],
+      "en": [ "Inloot" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000049",
+    "slug": "small-house-000000049",
+    "name": { "es": "Casa Pequeña", "en": "Small House" },
+    "description": { "es": "Casa Pequeña.", "en": "Small House." },
+    "category": "land_house",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Pequeña", "Minimalista" ],
+      "en": [ "Small", "Minimalist" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000050",
+    "slug": "medium-house-000000050",
+    "name": { "es": "Casa Mediana", "en": "Medium House" },
+    "description": { "es": "Casa Mediana.", "en": "Medium House." },
+    "category": "land_house",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 20, "ne": 2000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Mediana", "Reconfortante" ],
+      "en": [ "Medium", "Comforting" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000051",
+    "slug": "big-house-000000051",
+    "name": { "es": "Casa Grande", "en": "Big House" },
+    "description": { "es": "Casa Grande.", "en": "Big House." },
+    "category": "land_house",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 30, "ne": 3000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Grande", "Castillo" ],
+      "en": [ "Big", "Castle" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000052",
+    "slug": "max-stats-000000052",
+    "name": { "es": "Estadísticas Máximas", "en": "Max Stats" },
+    "description": { "es": "Sube tus estadísticas base al máximo alcanzable de forma natural.", "en": "Increase your base stadistics to the maximum achievable naturally." },
+    "category": "stat_boost",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Mejora", "STR", "DEX", "INT" ],
+      "en": [ "Boost", "STR", "DEX", "INT" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000053",
+    "slug": "max-base-skill-000000053",
+    "name": { "es": "Habilidad Máxima", "en": "Max Skill" },
+    "description": { "es": "Incrementa una habilidad básica al 100%.", "en": "Increases a basic skill by 100%." },
+    "category": "stat_boost",
+    "isSpecial": false,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 10, "ne": 1000 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Mejora", "Habilidad" ],
+      "en": [ "Boost", "Skill" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "000000054",
+    "slug": "max-special-skill-000000054",
+    "name": { "es": "Habilidad Especial Máxima", "en": "Max Special Skill" },
+    "description": { "es": "Incrementa una habilidad especial al 100%.", "en": "Increases a special skill by 100%." },
+    "category": "stat_boost",
+    "isSpecial": true,
+    "showItem": true,
+    "scope": "personal",
+    "price": { "eur": 15, "ne": 1500 },
+    "icon": "https://i.ibb.co/ZRgPwk8M/items-new-era.png",
+    "metadata": {
+      "es": [ "Mejora", "Habilidad" ],
+      "en": [ "Boost", "Skill" ]
+    },
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
   }
 ]
