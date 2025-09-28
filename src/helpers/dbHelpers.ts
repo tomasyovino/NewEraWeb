@@ -56,3 +56,10 @@ export function readMock<T = unknown>(file: string): T {
   }
   throw new Error(`Mock not found: ${file} (checked: ${candidates.join(', ')})`);
 }
+
+export function boolEnv(name: string, def = true) {
+  const v = process.env[name];
+  if (v == null) return def;
+  const s = String(v).trim().toLowerCase();
+  return s === '1' || s === 'true' || s === 'yes' || s === 'on';
+}

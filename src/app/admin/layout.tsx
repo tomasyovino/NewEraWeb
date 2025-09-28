@@ -6,6 +6,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es">
       <head>
+        <link rel="icon" href="/images/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-180.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/images/favicon-512.png" />
         <title>Admin · New Era</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
@@ -27,6 +33,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               <Link href="/admin/events/weekly">Eventos semanales</Link>
               <Link href="/admin/events/world">Eventos de mundo</Link>
               <Link href="/admin/donations">Donaciones</Link>
+              <Link href="/admin/packs">Packs</Link>
             </nav>
 
             <form action="/api/auth/logout" method="post">

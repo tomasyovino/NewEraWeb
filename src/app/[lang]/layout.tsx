@@ -4,7 +4,7 @@ import Link from 'next/link';
 import fs from 'node:fs';
 import path from 'node:path';
 import { LangSwitch, WikiFab, DiscordFab } from '@/components';
-import { AnchorToHome, LogoMark } from '@/components';
+import { AnchorToHome } from '@/components';
 import Image from 'next/image';
 
 function t(lang: 'es'|'en') {

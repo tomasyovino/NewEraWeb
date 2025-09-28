@@ -1,3 +1,4 @@
+import { boolEnv } from '@/helpers/dbHelpers';
 import Link from 'next/link';
 
 export default function AdminHome() {
@@ -7,9 +8,12 @@ export default function AdminHome() {
         <div className="tile">
           <div className="kicker">General</div>
           <h2 className="section-title">Dashboard</h2>
-          <p style={{ color: 'var(--muted)' }}>
-            Estás en modo <strong>mock</strong>. Cualquier cambio se mostrará como “previa” y no se guardará.
-          </p>
+          {
+              boolEnv('USE_MOCK', false) &&
+                <p style={{ color: 'var(--muted)' }}>
+                  Estás en modo <strong>mock</strong>. Cualquier cambio se mostrará como “previa” y no se guardará.
+                </p>
+          }
         </div>
 
         <div className="grid md:grid-cols-3 gap-4">
@@ -33,6 +37,14 @@ export default function AdminHome() {
             <h3>Donaciones</h3>
             <p className="mt-1" style={{ color:'var(--muted)' }}>
               Items, montos y disponibilidad.
+            </p>
+            <Link className="btn btn-ghost mt-3" href="/admin/donations">Administrar</Link>
+          </div>
+
+          <div className="tile">
+            <h3>Packs</h3>
+            <p className="mt-1" style={{ color:'var(--muted)' }}>
+              Insertar descripción
             </p>
             <Link className="btn btn-ghost mt-3" href="/admin/donations">Administrar</Link>
           </div>

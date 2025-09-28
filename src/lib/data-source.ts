@@ -9,16 +9,10 @@ import {
 import { DEFAULT_TZ } from './constants';
 import { currentWeekday, compareTimeHHmm } from './time';
 import { eventsMock, worldEventsMock, donationsMock, packsMock} from '@/mocks'
+import { boolEnv } from '@/helpers/dbHelpers';
 
 const isServer = typeof window === 'undefined';
-
-function boolEnv(name: string, def = true) {
-  const v = process.env[name];
-  if (v == null) return def;
-  const s = String(v).trim().toLowerCase();
-  return s === '1' || s === 'true' || s === 'yes' || s === 'on';
-}
-const USE_MOCK = boolEnv('USE_MOCK', true);
+const USE_MOCK = boolEnv('USE_MOCK', false);
 
 function makeUrl(path: string) {
   if (!isServer) return path;
