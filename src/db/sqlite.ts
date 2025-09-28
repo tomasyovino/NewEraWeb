@@ -70,10 +70,6 @@ CREATE TABLE IF NOT EXISTS donations (
   icon TEXT,
   is_special INTEGER NOT NULL DEFAULT 0,
   show_item INTEGER NOT NULL DEFAULT 1,
-  -- 👇 añade estos:
-  limits_per_account INTEGER,
-  limits_per_clan INTEGER,
-  limits_cooldown_days INTEGER,
   metadata_json TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
@@ -502,14 +498,12 @@ export function dbCreateDonationItem(input: Omit<Donation, 'id'|'createdAt'|'upd
       category, scope,
       price_eur, price_ne, price_ne_fake,
       featured, icon, is_special, show_item,
-      limits_per_account, limits_per_clan, limits_cooldown_days,
       metadata_json, created_at, updated_at
     ) VALUES (
       @id, @slug, @name_es, @name_en, @desc_es, @desc_en,
       @category, @scope,
       @price_eur, @price_ne, @price_ne_fake,
       @featured, @icon, @is_special, @show_item,
-      @limits_per_account, @limits_per_clan, @limits_cooldown_days,
       @metadata_json, @created_at, @updated_at
     )
   `).run({
@@ -528,9 +522,6 @@ export function dbCreateDonationItem(input: Omit<Donation, 'id'|'createdAt'|'upd
     icon: data.icon ?? null,
     is_special: boolToInt(!!data.isSpecial),
     show_item: boolToInt(!!data.showItem),
-    limits_per_account: data.limits?.perAccount ?? null,
-    limits_per_clan: data.limits?.perClan ?? null,
-    limits_cooldown_days: data.limits?.cooldownDays ?? null,
     metadata_json: data.metadata ? JSON.stringify(data.metadata) : null,
     created_at: data.createdAt,
     updated_at: data.updatedAt,
@@ -547,18 +538,10 @@ export function dbUpdateDonationItem(id: string, input: Partial<Omit<Donation, '
     ...existing,
     ...input,
     id,
-    // merge profundo de name/description/limits por si vienen parciales
     name: { es: input.name?.es ?? existing.name.es, en: input.name?.en ?? existing.name.en },
     description: input.description
       ? { es: input.description.es ?? existing.description?.es ?? '', en: input.description.en ?? existing.description?.en ?? '' }
       : existing.description,
-    limits: (input.limits || existing.limits)
-      ? {
-          perAccount: input.limits?.perAccount ?? existing.limits?.perAccount,
-          perClan: input.limits?.perClan ?? existing.limits?.perClan,
-          cooldownDays: input.limits?.cooldownDays ?? existing.limits?.cooldownDays,
-        }
-      : undefined,
     price: {
       eur: input.price?.eur ?? existing.price.eur,
       ne: input.price?.ne ?? existing.price.ne,
@@ -576,7 +559,6 @@ export function dbUpdateDonationItem(id: string, input: Partial<Omit<Donation, '
            category=@category, scope=@scope,
            price_eur=@price_eur, price_ne=@price_ne, price_ne_fake=@price_ne_fake,
            featured=@featured, icon=@icon, is_special=@is_special, show_item=@show_item,
-           limits_per_account=@limits_per_account, limits_per_clan=@limits_per_clan, limits_cooldown_days=@limits_cooldown_days,
            metadata_json=@metadata_json, updated_at=@updated_at
      WHERE id=@id
   `).run({
@@ -595,9 +577,6 @@ export function dbUpdateDonationItem(id: string, input: Partial<Omit<Donation, '
     icon: data.icon ?? null,
     is_special: boolToInt(!!data.isSpecial),
     show_item: boolToInt(!!data.showItem),
-    limits_per_account: data.limits?.perAccount ?? null,
-    limits_per_clan: data.limits?.perClan ?? null,
-    limits_cooldown_days: data.limits?.cooldownDays ?? null,
     metadata_json: data.metadata ? JSON.stringify(data.metadata) : null,
     updated_at: data.updatedAt,
   });

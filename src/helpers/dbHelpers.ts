@@ -20,11 +20,6 @@ export function rowToDonation(r: any): Donation {
     icon: r.icon ?? undefined,
     isSpecial: intToBool(r.is_special),
     showItem: intToBool(r.show_item),
-    limits: (r.limits_per_account ?? r.limits_per_clan ?? r.limits_cooldown_days) != null ? {
-      perAccount: r.limits_per_account ?? undefined,
-      perClan: r.limits_per_clan ?? undefined,
-      cooldownDays: r.limits_cooldown_days ?? undefined,
-    } : undefined,
     metadata: r.metadata_json ? JSON.parse(r.metadata_json) : undefined,
     createdAt: r.created_at,
     updatedAt: r.updated_at,

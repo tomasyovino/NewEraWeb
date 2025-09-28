@@ -64,11 +64,6 @@ export const donationPriceSchema = z.object({
   ne: z.number().nonnegative().optional(),
   neFake: z.number().nonnegative().optional(),
 });
-export const donationLimitsSchema = z.object({
-  perAccount: z.number().int().positive().optional(),
-  perClan: z.number().int().positive().optional(),
-  cooldownDays: z.number().int().positive().optional(),
-}).optional();
 export const donationSchema = z.object({
   id: z.string().min(1),
   slug: z.string().min(1),
@@ -84,7 +79,6 @@ export const donationSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
   createdAt: isoDate,
   updatedAt: isoDate,
-  limits: donationLimitsSchema,
 });
 export const packItemSchema = z.object({
   donationId: z.string().min(1),

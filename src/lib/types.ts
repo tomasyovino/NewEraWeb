@@ -61,12 +61,6 @@ export interface DonationPrice {
   neFake?: number;
 }
 
-export interface DonationLimits {
-  perAccount?: number;
-  perClan?: number;
-  cooldownDays?: number;
-}
-
 export interface Donation {
   id: string;
   slug: string;
@@ -80,7 +74,6 @@ export interface Donation {
   featured?: boolean;
   icon?: string;
   metadata?: Record<string, unknown>;
-  limits?: DonationLimits;
   createdAt: string;
   updatedAt: string;
 }
