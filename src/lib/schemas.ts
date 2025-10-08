@@ -99,8 +99,23 @@ export const packSchema = z.object({
   updatedAt: z.string().datetime(),
 });
 
+export const newSchema = z.object({
+  id: z.string().min(1),
+  slug: z.string().min(1),
+  title: localizedStringSchema,
+  excerpt: localizedStringSchema.optional(),
+  body: localizedStringSchema,
+  cover: z.string().url().or(z.string().startsWith('/')).optional(),
+  tags: z.array(z.string().min(1)).optional(),
+  publishedAt: isoDate.nullable().optional(),
+  featured: z.boolean().optional(),
+  createdAt: isoDate,
+  updatedAt: isoDate,
+});
+
 export const weeklyEventListSchema = z.array(weeklyEventSchema);
 export const worldEventListSchema = z.array(worldEventSchema);
 export const donationListSchema = z.array(donationSchema);
 export const packListSchema = z.array(packSchema);
+export const newListSchema = z.array(newSchema);
 export type DonationInput = z.input<typeof donationSchema>;

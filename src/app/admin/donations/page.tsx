@@ -15,10 +15,19 @@ export default function AdminDonationsPage() {
 
   const reload = async () => {
     setLoading(true);
-    const res = await fetch('/api/admin/donations', { cache: 'no-store' });
-    const data = await res.json();
-    setItems(data);
-    setLoading(false);
+    try {
+      const res = await fetch('/api/admin/donations', { cache: 'no-store' });
+      if (!res.ok) {
+        setItems([]);
+      } else {
+        const data = await res.json();
+        setItems(data);
+      }
+    } catch (error) {
+      setItems([]);      
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { reload(); }, []);

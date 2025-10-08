@@ -1,9 +1,9 @@
 import Database from 'better-sqlite3';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { Donation, LocalizedString, Pack, WeeklyEvent, WorldEvent } from '@/lib/types';
-import { readMock, rowToDonation, rowToPack } from '@/helpers/dbHelpers';
-import { donationSchema } from '@/lib/schemas';
+import type { Donation, LocalizedString, New, Pack, PackItem, WeeklyEvent, WorldEvent } from '@/lib/types';
+import { readMock, rowToDonation, rowToNew, rowToPack } from '@/helpers/dbHelpers';
+import { donationSchema, newSchema } from '@/lib/schemas';
 import { boolToInt, intToBool, ls, nowIso } from '@/utils/dbUtils';
 
 // Ruta del archivo SQLite
@@ -102,6 +102,26 @@ CREATE TABLE IF NOT EXISTS packs (
 
 CREATE INDEX IF NOT EXISTS idx_packs_featured_created
   ON packs(featured, created_at);
+
+CREATE TABLE IF NOT EXISTS news (
+  id TEXT PRIMARY KEY,
+  slug TEXT NOT NULL UNIQUE,
+  title_es TEXT NOT NULL,
+  title_en TEXT NOT NULL,
+  excerpt_es TEXT,
+  excerpt_en TEXT,
+  body_es TEXT NOT NULL,
+  body_en TEXT NOT NULL,
+  cover TEXT,
+  tags_json TEXT,            -- string[]
+  published_at TEXT,         -- ISO (nullable => draft)
+  featured INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_news_published_at ON news(published_at);
+CREATE INDEX IF NOT EXISTS idx_news_featured ON news(featured);
 `);
 
 
@@ -266,10 +286,52 @@ function seedPacks() {
   trx(mock);
 }
 
+function seedNews() {
+  const mock = readMock<New[]>('news.json');
+
+  const stmt = db.prepare(`
+    INSERT INTO news (
+      id, slug,
+      title_es, title_en, excerpt_es, excerpt_en,
+      body_es, body_en, cover, tags_json,
+      featured, published_at, created_at, updated_at
+    ) VALUES (
+      @id, @slug,
+      @title_es, @title_en, @excerpt_es, @excerpt_en,
+      @body_es, @body_en, @cover, @tags_json,
+      @featured, @published_at, @created_at, @updated_at
+    )
+  `);
+
+  const trx = db.transaction((rows: New[]) => {
+    for (const n of rows) {
+      stmt.run({
+        id: n.id,
+        slug: n.slug,
+        title_es: n.title.es,
+        title_en: n.title.en,
+        excerpt_es: n.excerpt?.es ?? null,
+        excerpt_en: n.excerpt?.en ?? null,
+        body_es: n.body.es,
+        body_en: n.body.en,
+        cover: n.cover ?? null,
+        tags_json: n.tags?.length ? JSON.stringify(n.tags) : null,
+        featured: boolToInt(!!n.featured),
+        published_at: n.publishedAt ?? null,
+        created_at: n.createdAt,
+        updated_at: n.updatedAt,
+      });
+    }
+  });
+
+  trx(mock);
+}
+
 if (tableEmpty('weekly_events')) seedWeekly();
 if (tableEmpty('world_events')) seedWorld();
 if (tableEmpty('donations')) seedDonation();
 if (tableEmpty('packs')) seedPacks();
+if (tableEmpty('news')) seedNews();
 
 // ---------- Queries públicas ----------
 export function dbListWeekly(): WeeklyEvent[] {
@@ -301,8 +363,8 @@ export function dbGetWeekly(id: string): WeeklyEvent | undefined {
   };
 }
 
-export function dbCreateWeekly(input: Omit<WeeklyEvent,'id'> & { id?: string }): WeeklyEvent {
-  const id = input.id ?? ('ev_' + Math.random().toString(36).slice(2,8));
+export function dbCreateWeekly(input: Omit<WeeklyEvent, 'id'> & { id?: string }): WeeklyEvent {
+  const id = input.id ?? ('ev_' + Math.random().toString(36).slice(2, 8));
   db.prepare(`
     INSERT INTO weekly_events
     (id, name_es, name_en, desc_es, desc_en, day_of_week, times_json, duration_minutes, featured, icon)
@@ -320,7 +382,7 @@ export function dbCreateWeekly(input: Omit<WeeklyEvent,'id'> & { id?: string }):
   return dbGetWeekly(id)!;
 }
 
-export function dbUpdateWeekly(id: string, input: Omit<WeeklyEvent,'id'> & { id?: string }): WeeklyEvent {
+export function dbUpdateWeekly(id: string, input: Omit<WeeklyEvent, 'id'> & { id?: string }): WeeklyEvent {
   db.prepare(`
     UPDATE weekly_events
       SET name_es=?, name_en=?, desc_es=?, desc_en=?, day_of_week=?, times_json=?,
@@ -410,8 +472,8 @@ export function dbGetWorld(id: string): WorldEvent | undefined {
   };
 }
 
-export function dbCreateWorld(input: Omit<WorldEvent,'id'> & { id?: string }): WorldEvent {
-  const id = input.id ?? ('we_' + Math.random().toString(36).slice(2,8));
+export function dbCreateWorld(input: Omit<WorldEvent, 'id'> & { id?: string }): WorldEvent {
+  const id = input.id ?? ('we_' + Math.random().toString(36).slice(2, 8));
   db.prepare(`
     INSERT INTO world_events
     (id, name_es, name_en, desc_es, desc_en, headline_es, headline_en, location_es, location_en,
@@ -433,7 +495,7 @@ export function dbCreateWorld(input: Omit<WorldEvent,'id'> & { id?: string }): W
   return dbGetWorld(id)!;
 }
 
-export function dbUpdateWorld(id: string, input: Omit<WorldEvent,'id'> & { id?: string }): WorldEvent {
+export function dbUpdateWorld(id: string, input: Omit<WorldEvent, 'id'> & { id?: string }): WorldEvent {
   db.prepare(`
     UPDATE world_events
       SET name_es=?, name_en=?, desc_es=?, desc_en=?, headline_es=?, headline_en=?,
@@ -480,7 +542,7 @@ export function dbGetDonationItem(id: string): Donation | undefined {
   return r ? rowToDonation(r) : undefined;
 }
 
-export function dbCreateDonationItem(input: Omit<Donation, 'id'|'createdAt'|'updatedAt'> & { id?: string }): Donation {
+export function dbCreateDonationItem(input: Omit<Donation, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Donation {
   const id = input.id ?? ('do_' + Math.random().toString(36).slice(2, 8));
   const now = nowIso();
 
@@ -530,7 +592,7 @@ export function dbCreateDonationItem(input: Omit<Donation, 'id'|'createdAt'|'upd
   return dbGetDonationItem(id)!;
 }
 
-export function dbUpdateDonationItem(id: string, input: Partial<Omit<Donation, 'id'|'createdAt'|'updatedAt'>>): Donation {
+export function dbUpdateDonationItem(id: string, input: Partial<Omit<Donation, 'id' | 'createdAt' | 'updatedAt'>>): Donation {
   const existing = dbGetDonationItem(id);
   if (!existing) throw new Error('Not found');
 
@@ -585,7 +647,12 @@ export function dbUpdateDonationItem(id: string, input: Partial<Omit<Donation, '
 }
 
 export function dbRemoveDonationItem(id: string): void {
-  db.prepare(`DELETE FROM donations WHERE id=?`).run(id);
+  const trx = db.transaction((donId: string) => {
+    db.prepare(`DELETE FROM donations WHERE id=?`).run(donId);
+    pruneDonationFromPacks(donId);
+  });
+
+  trx(id);
 }
 
 export function dbListPacks(): Pack[] {
@@ -601,7 +668,7 @@ export function dbGetPack(id: string): Pack | undefined {
   return r ? rowToPack(r) : undefined;
 }
 
-export function dbCreatePack(input: Omit<Pack, 'id'|'createdAt'|'updatedAt'> & { id?: string }): Pack {
+export function dbCreatePack(input: Omit<Pack, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Pack {
   const id = input.id ?? ('pk_' + Math.random().toString(36).slice(2, 8));
   const now = nowIso();
 
@@ -625,7 +692,7 @@ export function dbCreatePack(input: Omit<Pack, 'id'|'createdAt'|'updatedAt'> & {
   return dbGetPack(id)!;
 }
 
-export function dbUpdatePack(id: string, input: Partial<Omit<Pack, 'id'|'createdAt'|'updatedAt'>>): Pack {
+export function dbUpdatePack(id: string, input: Partial<Omit<Pack, 'id' | 'createdAt' | 'updatedAt'>>): Pack {
   const cur = dbGetPack(id);
   if (!cur) throw new Error('Not found');
 
@@ -676,4 +743,163 @@ export function dbUpdatePack(id: string, input: Partial<Omit<Pack, 'id'|'created
 
 export function dbRemovePack(id: string): void {
   db.prepare(`DELETE FROM packs WHERE id=?`).run(id);
+}
+
+export function dbListNews(): New[] {
+  const nowIso = new Date().toISOString();
+  const rows = db.prepare(`
+    SELECT *
+      FROM news
+     WHERE published_at IS NOT NULL
+       AND datetime(published_at) <= datetime(?)
+     ORDER BY datetime(published_at) DESC, created_at DESC
+  `).all(nowIso) as any[];
+  return rows.map(rowToNew);
+}
+
+export function dbListAllNews(): New[] {
+  const rows = db.prepare(`
+    SELECT *
+      FROM news
+     ORDER BY
+       CASE WHEN published_at IS NULL THEN 1 ELSE 0 END ASC,  -- primero programadas/publicadas
+       datetime(COALESCE(published_at, created_at)) DESC,
+       created_at DESC
+  `).all() as any[];
+  return rows.map(rowToNew);
+}
+
+export function dbGetNew(id: string): New | undefined {
+  const r = db.prepare(`SELECT * FROM news WHERE id=?`).get(id) as any;
+  return r ? rowToNew(r) : undefined;
+}
+
+export function dbGetNewBySlug(slug: string): New | undefined {
+  const r = db.prepare(`SELECT * FROM news WHERE slug=?`).get(slug) as any;
+  return r ? rowToNew(r) : undefined;
+}
+
+export function dbCreateNew(input: Omit<New, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): New {
+  const id = input.id ?? ('nw_' + Math.random().toString(36).slice(2, 8));
+  const now = nowIso();
+
+  const candidate: New = {
+    ...input,
+    id,
+    createdAt: now,
+    updatedAt: now,
+  };
+  const data = newSchema.parse(candidate);
+
+  db.prepare(`
+    INSERT INTO news (
+      id, slug, title_es, title_en, excerpt_es, excerpt_en,
+      body_es, body_en, cover, tags_json, published_at,
+      featured, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    data.id,
+    data.slug,
+    data.title.es, data.title.en,
+    data.excerpt?.es ?? null, data.excerpt?.en ?? null,
+    data.body.es, data.body.en,
+    data.cover ?? null,
+    data.tags ? JSON.stringify(data.tags) : null,
+    data.publishedAt ?? null,
+    data.featured ? 1 : 0,
+    data.createdAt,
+    data.updatedAt,
+  );
+
+  return dbGetNew(id)!;
+}
+
+export function dbUpdateNew(id: string, input: Partial<Omit<New, 'id' | 'createdAt' | 'updatedAt'>>): New {
+  const cur = dbGetNew(id);
+  if (!cur) throw new Error('Not found');
+
+  const merged: New = {
+    ...cur,
+    ...input,
+    id,
+    title: { es: input.title?.es ?? cur.title.es, en: input.title?.en ?? cur.title.en },
+    excerpt: input.excerpt
+      ? { es: input.excerpt.es ?? cur.excerpt?.es ?? '', en: input.excerpt.en ?? cur.excerpt?.en ?? '' }
+      : cur.excerpt,
+    body: {
+      es: input.body?.es ?? cur.body.es,
+      en: input.body?.en ?? cur.body.en,
+    },
+    tags: input.tags ?? cur.tags,
+    cover: input.cover ?? cur.cover,
+    featured: input.featured ?? cur.featured,
+    publishedAt: input.publishedAt ?? cur.publishedAt,
+    updatedAt: nowIso(),
+  };
+
+  const data = newSchema.parse(merged);
+
+  db.prepare(`
+    UPDATE news SET
+      slug=@slug,
+      title_es=@title_es, title_en=@title_en,
+      excerpt_es=@excerpt_es, excerpt_en=@excerpt_en,
+      body_es=@body_es, body_en=@body_en,
+      cover=@cover, tags_json=@tags_json,
+      published_at=@published_at,
+      featured=@featured,
+      updated_at=@updated_at
+    WHERE id=@id
+  `).run({
+    id: data.id,
+    slug: data.slug,
+    title_es: data.title.es,
+    title_en: data.title.en,
+    excerpt_es: data.excerpt?.es ?? null,
+    excerpt_en: data.excerpt?.en ?? null,
+    body_es: data.body.es,
+    body_en: data.body.en,
+    cover: data.cover ?? null,
+    tags_json: data.tags ? JSON.stringify(data.tags) : null,
+    published_at: data.publishedAt ?? null,
+    featured: data.featured ? 1 : 0,
+    updated_at: data.updatedAt,
+  });
+
+  return dbGetNew(id)!;
+}
+
+export function dbRemoveNew(id: string): void {
+  db.prepare(`DELETE FROM news WHERE id=?`).run(id);
+}
+
+function pruneDonationFromPacks(donationId: string): number {
+  const candidates = db.prepare(`
+    SELECT id, items_json FROM packs
+    WHERE items_json LIKE ?
+  `).all(`%${donationId}%`) as Array<{ id: string; items_json: string }>;
+
+  let updated = 0;
+
+  const upd = db.prepare(`
+    UPDATE packs
+       SET items_json = ?, updated_at = ?
+     WHERE id = ?
+  `);
+
+  const now = nowIso();
+
+  for (const row of candidates) {
+    let items: PackItem[] = [];
+    try { items = JSON.parse(row.items_json) as PackItem[]; } catch { items = []; }
+
+    const next = items.filter(it => it?.donationId !== donationId);
+
+    if (next.length !== items.length) {
+      upd.run(JSON.stringify(next), now, row.id);
+      updated++;
+    }
+  }
+
+  return updated;
 }

@@ -13,10 +13,19 @@ export default function AdminPacksPage() {
 
   const reload = async () => {
     setLoading(true);
-    const res = await fetch('/api/admin/packs', { cache: 'no-store' });
-    const data = await res.json();
-    setItems(data);
-    setLoading(false);
+    try {
+      const res = await fetch('/api/admin/packs', { cache: 'no-store' });
+      if(!res.ok) {
+        setItems([]);
+      } else {
+        const data = await res.json();
+        setItems(data);
+      }
+    } catch (error) {
+      setItems([]);      
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { reload(); }, []);

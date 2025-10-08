@@ -44,9 +44,17 @@ export default function AdminHome() {
           <div className="tile">
             <h3>Packs</h3>
             <p className="mt-1" style={{ color:'var(--muted)' }}>
-              Insertar descripción
+              Crea, edita y gestiona el contenido y la disponibilidad de los paquetes de ítems.
             </p>
-            <Link className="btn btn-ghost mt-3" href="/admin/donations">Administrar</Link>
+            <Link className="btn btn-ghost mt-3" href="/admin/packs">Administrar</Link>
+          </div>
+
+          <div className="tile">
+            <h3>Novedades</h3>
+            <p className="mt-1" style={{ color:'var(--muted)' }}>
+              Crea y gestiona artículos de noticias, anuncios y actualizaciones del proyecto.
+            </p>
+            <Link className="btn btn-ghost mt-3" href="/admin/news">Administrar</Link>
           </div>
         </div>
       </div>

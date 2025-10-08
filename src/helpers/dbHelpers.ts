@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Donation, Pack } from "@/lib/types";
+import { Donation, New, Pack } from "@/lib/types";
 import { intToBool, ls, parseJson } from "@/utils/dbUtils";
 
 export function rowToDonation(r: any): Donation {
@@ -36,6 +36,22 @@ export function rowToPack(r: any): Pack {
     price: { eur: r.price_eur ?? undefined, ne: r.price_ne ?? undefined, neFake: r.price_ne_fake ?? undefined },
     featured: intToBool(r.featured),
     icon: r.icon ?? undefined,
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+  };
+}
+
+export function rowToNew(r: any): New {
+  return {
+    id: r.id,
+    slug: r.slug,
+    title: ls(r.title_es, r.title_en),
+    excerpt: (r.excerpt_es || r.excerpt_en) ? ls(r.excerpt_es, r.excerpt_en) : undefined,
+    body: ls(r.body_es, r.body_en),
+    cover: r.cover ?? undefined,
+    tags: r.tags_json ? JSON.parse(r.tags_json) as string[] : undefined,
+    publishedAt: r.published_at ?? null,
+    featured: intToBool(r.featured),
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };

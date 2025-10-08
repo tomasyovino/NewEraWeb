@@ -95,3 +95,17 @@ export type Pack = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type New = {
+  id: string;
+  slug: string;
+  title: LocalizedString;
+  excerpt?: LocalizedString;
+  body: LocalizedString;
+  cover?: string;
+  tags?: string[];
+  publishedAt?: string | null;
+  featured?: boolean;
+  createdAt: string;
+  updatedAt: string;
+};

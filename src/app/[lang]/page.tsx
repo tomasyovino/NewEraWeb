@@ -1,9 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Reveal, TodayEvents, WorldEventsPanel } from '@/components';
-import { getTodayEventSlots, getWeeklyAgendaSlots, getWorldEvents } from '@/lib/data-source';
-import { buildTodaySentences } from '@/lib/event-text';
-import type { Locale } from '@/lib/types';
+import { NewsTeaser, Reveal, TodayEvents, WorldEventsPanel } from '@/components';
+import { getTodayEventSlots, getWeeklyAgendaSlots, getWorldEvents, getLatestNews } from '@/lib/data-source';
+import type { Locale, New } from '@/lib/types';
 import Image from 'next/image';
 import { DEFAULT_TZ } from '@/lib/constants';
 
@@ -19,19 +18,20 @@ export default async function HomePage({ params }: { params: { lang: string } })
   const today = await getTodayEventSlots();
   const weekly = await getWeeklyAgendaSlots();
   const worldEvents = await getWorldEvents();
+  const news = await getLatestNews(3);
 
   const NEXT_PUBLIC_DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_URL || 'https://discord.com';
   const NEXT_PUBLIC_WIKI_URL = process.env.NEXT_PUBLIC_WIKI_URL || '';
   const DL_WIN = process.env.NEXT_PUBLIC_DOWNLOAD_URL_WIN || '#';
   const DL_MAC = process.env.DOWNLOAD_URL_MAC || '';
 
-  const dayNamesES = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-  const dayNamesEN = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const dayNamesES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  const dayNamesEN = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const dayNames = lang === 'es' ? dayNamesES : dayNamesEN;
 
   const grouped: Record<number, typeof weekly> = {};
   for (const s of weekly) (grouped[s.dayOfWeek] ||= []).push(s);
-  const order = [1,2,3,4,5,6,7];
+  const order = [1, 2, 3, 4, 5, 6, 7];
 
   return (
     <>
@@ -42,15 +42,15 @@ export default async function HomePage({ params }: { params: { lang: string } })
             <div className="hero">
               <div className="hero-media" style={{ backgroundImage: "url(/images/hero-bg.webp)" }} />
               <div className="hero-content">
-                <div className="hero-eyebrow">{lang==='es' ? 'Bienvenido' : 'Welcome'}</div>
+                <div className="hero-eyebrow">{lang === 'es' ? 'Bienvenido' : 'Welcome'}</div>
                 <h1 className="hero-title">New Era</h1>
                 <p className="hero-sub">
                   {d.home.subtitle}
                 </p>
                 <div className="pillbar">
-                  <a href="#download" className="pill">{lang==='es' ? 'Descargar' : 'Download'}</a>
+                  <a href="#download" className="pill">{lang === 'es' ? 'Descargar' : 'Download'}</a>
                   <a href="#community" className="pill">Discord & Wiki</a>
-                  <a href="#events" className="pill">{lang==='es' ? 'Eventos' : 'Events'}</a>
+                  <a href="#events" className="pill">{lang === 'es' ? 'Eventos' : 'Events'}</a>
                 </div>
               </div>
             </div>
@@ -58,10 +58,37 @@ export default async function HomePage({ params }: { params: { lang: string } })
         </div>
       </section>
 
-      {/* EVENTS */}
-      <section id="events" className="section section--events mt-6">
+      {/* LATEST NEWS */}
+      <section id="news" className="section">
         <div className="container">
-          <Reveal><h2 className="section-title">{lang==='es' ? 'Eventos' : 'Events'}</h2></Reveal>
+          <Reveal><h2 className="section-title">{lang === 'es' ? 'Novedades' : 'News'}</h2></Reveal>
+
+          {!news.length ? (
+            <Reveal className="mt-3">
+              <div className="note">
+                {lang === 'es' ? 'Aún no hay novedades.' : 'No news yet.'}
+              </div>
+            </Reveal>
+          ) : (
+            <Reveal className="mt-4">
+              <div className="grid md:grid-cols-3 gap-4">
+                {news.map((n: New) => <NewsTeaser key={n.id} n={n} lang={lang} />)}
+              </div>
+              <div className="mt-3">
+                <a className="btn btn-ghost" href={`/${lang}/news`}>
+                  {lang === 'es' ? 'Ver todas' : 'See all'}
+                </a>
+              </div>
+            </Reveal>
+          )}
+        </div>
+      </section>
+
+
+      {/* EVENTS */}
+      <section id="events" className="section section--events">
+        <div className="container">
+          <Reveal><h2 className="section-title">{lang === 'es' ? 'Eventos' : 'Events'}</h2></Reveal>
 
           {/* Mundo */}
           <Reveal className="mt-4">
@@ -77,7 +104,6 @@ export default async function HomePage({ params }: { params: { lang: string } })
           {/* Semanal */}
           <Reveal className="mt-4">
             {(() => {
-              // mostrar solo días con eventos
               const daysWith = order.filter((d) => (grouped[d]?.length ?? 0) > 0);
 
               if (daysWith.length === 0) {
@@ -115,7 +141,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
                     ))}
                   </div>
                   <div className="note mt-2">
-                    {lang==='es'
+                    {lang === 'es'
                       ? `Horarios en hora del servidor (${DEFAULT_TZ}).`
                       : `Times are in server time (${DEFAULT_TZ}).`}
                   </div>
@@ -127,9 +153,9 @@ export default async function HomePage({ params }: { params: { lang: string } })
       </section>
 
       {/* COMMUNITY (Discord / Wiki) */}
-      <section id="community" className="section section--half mt-6">
+      <section id="community" className="section">
         <div className="container">
-          <Reveal><h2 className="section-title">{lang==='es' ? 'Comunidad' : 'Community'}</h2></Reveal>
+          <Reveal><h2 className="section-title">{lang === 'es' ? 'Comunidad' : 'Community'}</h2></Reveal>
           <Reveal className="mt-4">
             <div className="grid md:grid-cols-2 gap-4">
               {/* Discord */}
@@ -138,10 +164,10 @@ export default async function HomePage({ params }: { params: { lang: string } })
                   <Image src="/images/discord.svg" alt="Discord" width={28} height={28} className="icon icon-glow" />
                   <div>
                     <h3>Discord</h3>
-                    <p style={{color:'var(--muted)'}}>{lang==='es' ? 'Únete a la comunidad y a los anuncios' : 'Join the community and announcements'}</p>
+                    <p style={{ color: 'var(--muted)' }}>{lang === 'es' ? 'Únete a la comunidad y a los anuncios' : 'Join the community and announcements'}</p>
                   </div>
                 </div>
-                <span className="chip">{lang==='es' ? 'Abrir' : 'Open'}</span>
+                <span className="chip">{lang === 'es' ? 'Abrir' : 'Open'}</span>
               </a>
 
               {/* Wiki */}
@@ -150,10 +176,10 @@ export default async function HomePage({ params }: { params: { lang: string } })
                   <Image src="/images/guide.svg" alt="Wiki" width={28} height={28} className="icon icon-glow" />
                   <div>
                     <h3>Wiki</h3>
-                    <p style={{color:'var(--muted)'}}>{lang==='es' ? 'Guías, sistemas y progresión' : 'Guides, systems and progression'}</p>
+                    <p style={{ color: 'var(--muted)' }}>{lang === 'es' ? 'Guías, sistemas y progresión' : 'Guides, systems and progression'}</p>
                   </div>
                 </div>
-                <span className="chip">{NEXT_PUBLIC_WIKI_URL ? (lang==='es' ? 'Abrir' : 'Open') : (lang==='es' ? 'Pronto' : 'Soon')}</span>
+                <span className="chip">{NEXT_PUBLIC_WIKI_URL ? (lang === 'es' ? 'Abrir' : 'Open') : (lang === 'es' ? 'Pronto' : 'Soon')}</span>
               </a>
             </div>
           </Reveal>
@@ -163,15 +189,15 @@ export default async function HomePage({ params }: { params: { lang: string } })
       {/* DOWNLOAD */}
       <section id="download" className="section section--half section--half-last  mb-12">
         <div className="container">
-          <Reveal><h2 className="section-title">{lang==='es' ? 'Descargar' : 'Download'}</h2></Reveal>
+          <Reveal><h2 className="section-title">{lang === 'es' ? 'Descargar' : 'Download'}</h2></Reveal>
 
           <Reveal className="mt-4">
             <div className="tile">
               {/* CTA grande */}
               <div className="dl-banner">
                 <div>
-                  <div className="kicker">{lang==='es' ? 'Cliente del juego' : 'Game client'}</div>
-                  <h3>{lang==='es' ? 'Descarga y juega' : 'Download & play'}</h3>
+                  <div className="kicker">{lang === 'es' ? 'Cliente del juego' : 'Game client'}</div>
+                  <h3>{lang === 'es' ? 'Descarga y juega' : 'Download & play'}</h3>
                 </div>
                 <div className="dl-buttons">
                   <a target="_blank" href={DL_WIN} className="btn btn-primary btn-xl btn-fixed">Windows</a>
@@ -184,14 +210,14 @@ export default async function HomePage({ params }: { params: { lang: string } })
               {/* info compacta */}
               <div className="meta-list">
                 <div>
-                  <span>{lang==='es' ? 'Tamaño de descarga' : 'Download size'}</span>{' '}
+                  <span>{lang === 'es' ? 'Tamaño de descarga' : 'Download size'}</span>{' '}
                   <span className="chip">~1.2 GB</span>
                 </div>
               </div>
 
               {/* leyenda importante */}
               <div className="note-box">
-                {lang==='es'
+                {lang === 'es'
                   ? 'Importante: Se requiere Windows 8 o una versión más reciente para ejecutar el launcher.'
                   : 'Important: Windows 8 or a more recent version is required to run the launcher.'}
               </div>

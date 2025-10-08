@@ -1,14 +1,16 @@
 import {
   WeeklyEvent, EventSlot, WorldEvent,
   Pack,
+  New,
 } from './types';
 import {
   weeklyEventListSchema, donationListSchema, worldEventListSchema,
-  packListSchema, 
+  packListSchema,
+  newListSchema,
 } from './schemas';
 import { DEFAULT_TZ } from './constants';
 import { currentWeekday, compareTimeHHmm } from './time';
-import { eventsMock, worldEventsMock, donationsMock, packsMock} from '@/mocks'
+import { eventsMock, worldEventsMock, donationsMock, packsMock, newsMock } from '@/mocks'
 import { boolEnv } from '@/helpers/dbHelpers';
 
 const isServer = typeof window === 'undefined';
@@ -116,4 +118,41 @@ export async function getPacks(): Promise<Pack[]> {
     return packListSchema.parse(packsMock as unknown);
   }
   return packListSchema.parse(await fetchJson<unknown>('/api/packs'));
+}
+
+/* ================== NEWS ================== */
+export async function getLatestNews(limit = 3): Promise<New[]> {
+  if (USE_MOCK) {
+    const all = newListSchema.parse(newsMock as unknown);
+    const pub = all
+      .filter(n => n.publishedAt && Date.now() >= Date.parse(n.publishedAt))
+      .sort((a, b) => Date.parse(b.publishedAt!) - Date.parse(a.publishedAt!));
+    return pub.slice(0, limit);
+  }
+  const raw = await fetchJson<unknown>(`/api/news?published=1&limit=${limit}`);
+  return newListSchema.parse(raw);
+}
+
+export async function getAllPublishedNews(): Promise<New[]> {
+  if (USE_MOCK) {
+    const all = newListSchema.parse(newsMock as unknown);
+    return all
+      .filter(n => n.publishedAt && Date.now() >= Date.parse(n.publishedAt))
+      .sort((a, b) => Date.parse(b.publishedAt!) - Date.parse(a.publishedAt!));
+  }
+  const raw = await fetchJson<unknown>(`/api/news?published=1`);
+  return newListSchema.parse(raw);
+}
+
+export async function getNewsBySlug(slug: string): Promise<New | null> {
+  if (USE_MOCK) {
+    const all = newListSchema.parse(newsMock as unknown);
+    const item = all.find(
+      n => n.slug === slug && n.publishedAt && Date.now() >= Date.parse(n.publishedAt)
+    );
+    return item ?? null;
+  }
+  const raw = await fetchJson<unknown>(`/api/news?published=1&limit=1&slug=${encodeURIComponent(slug)}`);
+  const arr = newListSchema.parse(raw);
+  return arr[0] ?? null;
 }
