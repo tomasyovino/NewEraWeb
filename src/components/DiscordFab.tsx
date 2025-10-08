@@ -14,11 +14,11 @@ export default function DiscordFab({ lang }: { lang: Locale }) {
       target={isDisabled ? undefined : '_blank'}
       rel={isDisabled ? undefined : 'noopener noreferrer'}
       className={`fab discord-fab ${isDisabled ? 'fab-disabled' : ''}`}
-      aria-label={lang === 'es' ? 'Abrir wiki' : 'Open wiki'}
+      aria-label={lang === 'es' ? 'Abrir discord' : 'Open discord'}
       title={
         isDisabled
-          ? (lang === 'es' ? 'Wiki: pronto' : 'Wiki: coming soon')
-          : (lang === 'es' ? 'Abrir wiki' : 'Open wiki')
+          ? (lang === 'es' ? 'Discord: pronto' : 'Discord: coming soon')
+          : (lang === 'es' ? 'Abrir discord' : 'Open discord')
       }
       onClick={e => { if (isDisabled) e.preventDefault(); }}
     >

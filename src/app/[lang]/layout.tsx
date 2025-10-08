@@ -42,10 +42,10 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
               <LangSwitch current={lang} />
               {/* nav pills (anchor links) */}
               <nav className="nav">
+                <Link href={`/${lang}/news`}>{dict.nav.news}</Link>
                 <AnchorToHome lang={lang} hash="events"   className="">{dict.nav.events}</AnchorToHome>
                 <Link href={`/${lang}/donate`}>{dict.nav.donate}</Link>
                 <AnchorToHome lang={lang} hash="community" className="">{dict.nav.community}</AnchorToHome>
-                <Link href={`/${lang}/news`}>{dict.nav.news}</Link>
               </nav>
             </div>
 

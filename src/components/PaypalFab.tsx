@@ -13,18 +13,17 @@ export default function PaypalFab({ lang }: { lang: Locale }) {
       href={href}
       target={isDisabled ? undefined : '_blank'}
       rel={isDisabled ? undefined : 'noopener noreferrer'}
-      className={`fab wiki-fab ${isDisabled ? 'fab-disabled' : ''}`}
-      aria-label={lang === 'es' ? 'Abrir Paypal' : 'Open Paypal'}
+      className={`fab paypal-fab ${isDisabled ? 'fab-disabled' : ''}`}
+      aria-label={lang === 'es' ? 'Abrir PayPal' : 'Open PayPal'}
       title={
         isDisabled
-          ? (lang === 'es' ? 'Paypal: pronto' : 'Paypal: coming soon')
-          : (lang === 'es' ? 'Abrir Paypal' : 'Open Paypal')
+          ? (lang === 'es' ? 'PayPal: pronto' : 'PayPal: coming soon')
+          : (lang === 'es' ? 'Abrir PayPal' : 'Open PayPal')
       }
       onClick={e => { if (isDisabled) e.preventDefault(); }}
     >
-      {/* Asegúrate de que guide.svg use fill="currentColor" (o lo hiciste antes) */}
-      <Image src="/images/guide.svg" alt="" width={22} height={22} aria-hidden />
-      <span className="fab-label">{lang === 'es' ? 'Paypal' : 'Paypal'}</span>
+      <Image src="/images/paypal.svg" alt="" width={28} height={28} aria-hidden />
+      <span className="fab-label">PayPal</span>
     </a>
   );
 }

@@ -68,50 +68,54 @@ export default function FloatingNews({
                         borderBottom: `1px solid ${GOLD_BORDER}`,
                     }}
                 >
-                    <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                        <span
-                            className="kicker"
-                            style={{
-                                margin: 0,
-                                letterSpacing: '.08em',
-                                color: GOLD,
-                                textShadow: '0 0 12px rgba(245,208,111,.25)',
-                            }}
-                        >
-                            {lang === 'es' ? 'NOVEDADES' : 'NEWS'}
-                        </span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
+                        <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+                            <span
+                                className="kicker"
+                                style={{
+                                    margin: 0,
+                                    letterSpacing: '.08em',
+                                    color: GOLD,
+                                    textShadow: '0 0 12px rgba(245,208,111,.25)',
+                                }}
+                            >
+                                {lang === 'es' ? 'NOVEDADES' : 'NEWS'}
+                            </span>
 
-                        {/* chip dorado */}
-                        <span
-                            className="chip"
-                            style={{
-                                marginLeft: 'auto',
-                                background: GOLD_SOFT,
-                                border: `1px solid ${GOLD_BORDER}`,
-                                color: GOLD,
-                            }}
-                        >
-                            {latest.length}
-                        </span>
+                            {/* chip dorado */}
+                            <span
+                                className="chip"
+                                style={{
+                                    marginLeft: 'auto',
+                                    background: GOLD_SOFT,
+                                    border: `1px solid ${GOLD_BORDER}`,
+                                    color: GOLD,
+                                }}
+                            >
+                                {latest.length}
+                            </span>
+                        </div>
 
-                        <Link
-                            href={`/${lang}/news`}
-                            className="btn btn-ghost btn-sm"
-                            style={{ borderColor: GOLD_BORDER }}
-                        >
-                            {lang === 'es' ? 'Ver todo' : 'See all'}
-                        </Link>
+                        <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+                            <Link
+                                href={`/${lang}/news`}
+                                className="btn btn-ghost btn-sm"
+                                style={{ borderColor: GOLD_BORDER, display: open ? "block" : "none" }}
+                            >
+                                {lang === 'es' ? 'Ver todo' : 'See all'}
+                            </Link>
 
-                        <button
-                            type="button"
-                            className="btn btn-ghost btn-sm"
-                            onClick={() => setOpen(false)}
-                            aria-label={lang === 'es' ? 'Cerrar novedades' : 'Close news'}
-                            title={lang === 'es' ? 'Cerrar' : 'Close'}
-                            style={{ borderColor: GOLD_BORDER }}
-                        >
-                            ×
-                        </button>
+                            <button
+                                type="button"
+                                className="btn btn-ghost btn-sm"
+                                onClick={() => setOpen(false)}
+                                aria-label={lang === 'es' ? 'Cerrar novedades' : 'Close news'}
+                                title={lang === 'es' ? 'Cerrar' : 'Close'}
+                                style={{ borderColor: GOLD_BORDER, display: open ? "block" : "none" }}
+                            >
+                                ×
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -123,7 +127,7 @@ export default function FloatingNews({
                             href={`/${lang}/news/${n.slug}`}
                             className="list-soft"
                             style={{
-                                display: 'flex',
+                                display: open ? 'flex' : "none",
                                 gap: 10,
                                 alignItems: 'stretch',
                                 padding: 8,

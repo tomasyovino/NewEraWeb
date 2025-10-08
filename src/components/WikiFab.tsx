@@ -22,7 +22,6 @@ export default function WikiFab({ lang }: { lang: Locale }) {
       }
       onClick={e => { if (isDisabled) e.preventDefault(); }}
     >
-      {/* Asegúrate de que guide.svg use fill="currentColor" (o lo hiciste antes) */}
       <Image src="/images/guide.svg" alt="" width={22} height={22} aria-hidden />
       <span className="fab-label">{lang === 'es' ? 'Wiki' : 'Wiki'}</span>
     </a>

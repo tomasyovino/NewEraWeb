@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { NewsTeaser, NewsRail, Reveal, TodayEvents, WorldEventsPanel, FloatingNews } from '@/components';
+import { Reveal, TodayEvents, WorldEventsPanel, FloatingNews } from '@/components';
 import { getTodayEventSlots, getWeeklyAgendaSlots, getWorldEvents, getLatestNews } from '@/lib/data-source';
 import type { Locale, New } from '@/lib/types';
 import Image from 'next/image';
