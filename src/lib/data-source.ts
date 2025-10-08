@@ -2,6 +2,7 @@ import {
   WeeklyEvent, EventSlot, WorldEvent,
   Pack,
   New,
+  NewsPage,
 } from './types';
 import {
   weeklyEventListSchema, donationListSchema, worldEventListSchema,
@@ -133,15 +134,29 @@ export async function getLatestNews(limit = 3): Promise<New[]> {
   return newListSchema.parse(raw);
 }
 
-export async function getAllPublishedNews(): Promise<New[]> {
+export async function getAllPublishedNewsPage(page = 1, limit = 10): Promise<NewsPage> {
   if (USE_MOCK) {
-    const all = newListSchema.parse(newsMock as unknown);
-    return all
+    const all = newListSchema.parse(newsMock as unknown)
       .filter(n => n.publishedAt && Date.now() >= Date.parse(n.publishedAt))
       .sort((a, b) => Date.parse(b.publishedAt!) - Date.parse(a.publishedAt!));
+    const total = all.length;
+    const pages = Math.max(1, Math.ceil(total / limit));
+    const p = Math.max(1, Math.min(page, pages));
+    const start = (p - 1) * limit;
+    const items = all.slice(start, start + limit);
+    return { items, total, page: p, limit, pages };
   }
-  const raw = await fetchJson<unknown>(`/api/news?published=1`);
-  return newListSchema.parse(raw);
+
+  const url = `/api/news?published=1&withMeta=1&limit=${limit}&page=${page}`;
+  const raw = await fetchJson<unknown>(url);
+  const { items, total, pages }: any = raw as any;
+  return {
+    items: newListSchema.parse(items),
+    total,
+    page,
+    limit,
+    pages,
+  };
 }
 
 export async function getNewsBySlug(slug: string): Promise<New | null> {

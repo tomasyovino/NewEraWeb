@@ -109,3 +109,5 @@ export type New = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type NewsPage = { items: New[]; total: number; page: number; limit: number; pages: number };

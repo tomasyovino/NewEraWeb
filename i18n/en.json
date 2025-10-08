@@ -4,7 +4,8 @@
     "events": "Events",
     "donate": "Donate",
     "community": "Community",
-    "download": "Download"
+    "download": "Download",
+    "news": "News"
   },
   "cta": {
     "playDownload": "Play"

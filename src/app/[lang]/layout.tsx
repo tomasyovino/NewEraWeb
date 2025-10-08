@@ -6,6 +6,7 @@ import path from 'node:path';
 import { LangSwitch, WikiFab, DiscordFab } from '@/components';
 import { AnchorToHome } from '@/components';
 import Image from 'next/image';
+import PaypalFab from '@/components/PaypalFab';
 
 function t(lang: 'es'|'en') {
   const p = path.join(process.cwd(), 'i18n', `${lang}.json`);
@@ -44,7 +45,7 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
                 <AnchorToHome lang={lang} hash="events"   className="">{dict.nav.events}</AnchorToHome>
                 <Link href={`/${lang}/donate`}>{dict.nav.donate}</Link>
                 <AnchorToHome lang={lang} hash="community" className="">{dict.nav.community}</AnchorToHome>
-                <AnchorToHome lang={lang} hash="download"  className="">{dict.nav.download}</AnchorToHome>
+                <Link href={`/${lang}/news`}>{dict.nav.news}</Link>
               </nav>
             </div>
 
@@ -76,6 +77,7 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
           </div>
         </footer>
         <div className="fab-stack">
+          <PaypalFab lang={lang} />
           <DiscordFab lang={lang} />
           <WikiFab lang={lang} />
         </div>

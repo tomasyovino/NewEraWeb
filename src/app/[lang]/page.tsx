@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { NewsTeaser, Reveal, TodayEvents, WorldEventsPanel } from '@/components';
+import { NewsTeaser, NewsRail, Reveal, TodayEvents, WorldEventsPanel, FloatingNews } from '@/components';
 import { getTodayEventSlots, getWeeklyAgendaSlots, getWorldEvents, getLatestNews } from '@/lib/data-source';
 import type { Locale, New } from '@/lib/types';
 import Image from 'next/image';
@@ -15,10 +15,12 @@ export default async function HomePage({ params }: { params: { lang: string } })
   const lang = (params.lang === 'en' ? 'en' : 'es') as Locale;
   const d = dict(lang);
 
-  const today = await getTodayEventSlots();
-  const weekly = await getWeeklyAgendaSlots();
-  const worldEvents = await getWorldEvents();
-  const news = await getLatestNews(3);
+  const [latestNews, today, weekly, worldEvents] = await Promise.all([
+    getLatestNews(5),
+    getTodayEventSlots(),
+    getWeeklyAgendaSlots(),
+    getWorldEvents(),
+  ]);
 
   const NEXT_PUBLIC_DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_URL || 'https://discord.com';
   const NEXT_PUBLIC_WIKI_URL = process.env.NEXT_PUBLIC_WIKI_URL || '';
@@ -39,6 +41,7 @@ export default async function HomePage({ params }: { params: { lang: string } })
       <section id="hero" className="section section--hero">
         <div className="container">
           <Reveal>
+            <div style={{ position: 'relative' }}>
             <div className="hero">
               <div className="hero-media" style={{ backgroundImage: "url(/images/hero-bg.webp)" }} />
               <div className="hero-content">
@@ -54,36 +57,11 @@ export default async function HomePage({ params }: { params: { lang: string } })
                 </div>
               </div>
             </div>
+            <FloatingNews items={latestNews} lang={lang} />
+            </div>
           </Reveal>
         </div>
       </section>
-
-      {/* LATEST NEWS */}
-      <section id="news" className="section">
-        <div className="container">
-          <Reveal><h2 className="section-title">{lang === 'es' ? 'Novedades' : 'News'}</h2></Reveal>
-
-          {!news.length ? (
-            <Reveal className="mt-3">
-              <div className="note">
-                {lang === 'es' ? 'Aún no hay novedades.' : 'No news yet.'}
-              </div>
-            </Reveal>
-          ) : (
-            <Reveal className="mt-4">
-              <div className="grid md:grid-cols-3 gap-4">
-                {news.map((n: New) => <NewsTeaser key={n.id} n={n} lang={lang} />)}
-              </div>
-              <div className="mt-3">
-                <a className="btn btn-ghost" href={`/${lang}/news`}>
-                  {lang === 'es' ? 'Ver todas' : 'See all'}
-                </a>
-              </div>
-            </Reveal>
-          )}
-        </div>
-      </section>
-
 
       {/* EVENTS */}
       <section id="events" className="section section--events">
