@@ -1700,3 +1700,18 @@ html {
   overflow-x: auto;
   white-space: nowrap;
 }
+
+.prose-md h2 {
+  position: relative;
+  padding-bottom: .2rem;
+}
+
+.prose-md h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -.4rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
+}

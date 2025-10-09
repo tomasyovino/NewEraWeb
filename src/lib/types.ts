@@ -111,3 +111,30 @@ export type New = {
 };
 
 export type NewsPage = { items: New[]; total: number; page: number; limit: number; pages: number };
+
+export type Rule = {
+  id: string;
+  slug: string;
+  title: LocalizedString;
+  body: LocalizedString;
+  category?: string | null;
+  tags?: string[];
+  sort: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type AboutEntry = {
+  id: string;
+  slug: string;
+  title: LocalizedString;
+  role?: string | null;
+  avatar?: string | null;
+  body: LocalizedString;
+  tags?: string[];
+  sort: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

@@ -35,6 +35,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               <Link href="/admin/donations">Donaciones</Link>
               <Link href="/admin/packs">Packs</Link>
               <Link href="/admin/news">Novedades</Link>
+              <Link href="/admin/rules">Reglas</Link>
+              <Link href="/admin/about">Quienes Somos</Link>
             </nav>
 
             <form action="/api/auth/logout" method="post">

@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Donation, New, Pack } from "@/lib/types";
-import { intToBool, ls, parseJson } from "@/utils/dbUtils";
+import { AboutEntry, Donation, New, Pack, Rule } from "@/lib/types";
+import { intToBool, ls, parseJson, parseJsonArray } from "@/utils/dbUtils";
+import { aboutSchema } from '@/lib/schemas';
 
 export function rowToDonation(r: any): Donation {
   return {
@@ -55,6 +56,37 @@ export function rowToNew(r: any): New {
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };
+}
+
+export function rowToRule(r: any): Rule {
+  return {
+    id: r.id,
+    slug: r.slug,
+    title: { es: r.title_es, en: r.title_en },
+    body: { es: r.body_es, en: r.body_en },
+    category: r.category ?? null,
+    tags: r.tags_json ? JSON.parse(r.tags_json) : [],
+    sort: r.sort ?? 0,
+    active: !!r.active,
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+  };
+}
+
+export function rowToAbout(r: any): AboutEntry {
+  return aboutSchema.parse({
+    id: r.id,
+    slug: r.slug,
+    title: { es: r.title_es, en: r.title_en },
+    role: r.role ?? null,
+    avatar: r.avatar ?? null,
+    body: { es: r.body_es_md, en: r.body_en_md },
+    tags: parseJsonArray<string[]>(r.tags_json, []),
+    sort: Number(r.sort ?? 0),
+    active: intToBool(r.active),
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+  });
 }
 
 export function readMock<T = unknown>(file: string): T {

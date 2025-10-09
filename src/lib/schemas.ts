@@ -113,9 +113,44 @@ export const newSchema = z.object({
   updatedAt: isoDate,
 });
 
+export const ruleSchema = z.object({
+  id: z.string(),
+  slug: z.string().min(1).regex(/^[a-z0-9\-]+$/i, 'Slug inválido'),
+  title: z.object({
+    es: z.string().min(1),
+    en: z.string().min(1),
+  }),
+  body: z.object({
+    es: z.string().min(1),
+    en: z.string().min(1),
+  }),
+  category: z.string().min(1).optional().nullable(),
+  tags: z.array(z.string()).optional(),
+  sort: z.number().int().default(0),
+  active: z.boolean().default(true),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export const aboutSchema = z.object({
+  id: z.string(),
+  slug: z.string().min(1),
+  title: localizedStringSchema,
+  role: z.string().trim().min(1).optional().nullable(),
+  avatar: z.string().url().optional().nullable(),
+  body: localizedStringSchema,
+  tags: z.array(z.string().trim().min(1)).optional(),
+  sort: z.number().int(),
+  active: z.boolean(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
 export const weeklyEventListSchema = z.array(weeklyEventSchema);
 export const worldEventListSchema = z.array(worldEventSchema);
 export const donationListSchema = z.array(donationSchema);
 export const packListSchema = z.array(packSchema);
 export const newListSchema = z.array(newSchema);
+export const ruleListSchema = z.array(ruleSchema);
+export const aboutListSchema = z.array(aboutSchema);
 export type DonationInput = z.input<typeof donationSchema>;

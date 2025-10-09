@@ -3,11 +3,16 @@ import {
   Pack,
   New,
   NewsPage,
+  Rule,
+  AboutEntry,
 } from './types';
 import {
   weeklyEventListSchema, donationListSchema, worldEventListSchema,
   packListSchema,
   newListSchema,
+  ruleListSchema,
+  ruleSchema,
+  aboutListSchema,
 } from './schemas';
 import { DEFAULT_TZ } from './constants';
 import { currentWeekday, compareTimeHHmm } from './time';
@@ -170,4 +175,32 @@ export async function getNewsBySlug(slug: string): Promise<New | null> {
   const raw = await fetchJson<unknown>(`/api/news?published=1&limit=1&slug=${encodeURIComponent(slug)}`);
   const arr = newListSchema.parse(raw);
   return arr[0] ?? null;
+}
+
+/* ================== RULES ================== */
+export async function getRules(): Promise<Rule[]> {
+  if (USE_MOCK) {
+    return [];
+  }
+  const raw = await fetchJson<unknown>('/api/rules');
+  return ruleListSchema.parse(raw);
+}
+
+export async function getRuleBySlug(slug: string): Promise<Rule | null> {
+  if (USE_MOCK) return null;
+  try {
+    const raw = await fetchJson<unknown>(`/api/rules/${encodeURIComponent(slug)}`);
+    return ruleSchema.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+/* ================== ABOUT ================== */
+export async function getAbout(): Promise<AboutEntry[]> {
+  if (USE_MOCK) {
+    return [];
+  }
+  const raw = await fetchJson<unknown>('/api/about');
+  return aboutListSchema.parse(raw);
 }

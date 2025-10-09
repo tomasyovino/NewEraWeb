@@ -1,8 +1,8 @@
 import Database from 'better-sqlite3';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { Donation, LocalizedString, New, Pack, PackItem, WeeklyEvent, WorldEvent } from '@/lib/types';
-import { readMock, rowToDonation, rowToNew, rowToPack } from '@/helpers/dbHelpers';
+import type { AboutEntry, Donation, LocalizedString, New, Pack, PackItem, Rule, WeeklyEvent, WorldEvent } from '@/lib/types';
+import { readMock, rowToAbout, rowToDonation, rowToNew, rowToPack, rowToRule } from '@/helpers/dbHelpers';
 import { donationSchema, newSchema } from '@/lib/schemas';
 import { boolToInt, intToBool, ls, nowIso } from '@/utils/dbUtils';
 
@@ -122,6 +122,41 @@ CREATE TABLE IF NOT EXISTS news (
 
 CREATE INDEX IF NOT EXISTS idx_news_published_at ON news(published_at);
 CREATE INDEX IF NOT EXISTS idx_news_featured ON news(featured);
+
+CREATE TABLE IF NOT EXISTS rules (
+  id TEXT PRIMARY KEY,
+  slug TEXT NOT NULL UNIQUE,
+  title_es TEXT NOT NULL,
+  title_en TEXT NOT NULL,
+  body_es  TEXT NOT NULL,  -- markdown
+  body_en  TEXT NOT NULL,  -- markdown
+  category TEXT,
+  tags_json TEXT,
+  sort INTEGER NOT NULL DEFAULT 0,
+  active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_rules_active_sort ON rules(active, sort, created_at);
+
+CREATE TABLE IF NOT EXISTS about (
+  id TEXT PRIMARY KEY,
+  slug TEXT NOT NULL UNIQUE,
+  title_es TEXT NOT NULL,
+  title_en TEXT NOT NULL,
+  role TEXT,
+  avatar TEXT,
+  body_es_md TEXT NOT NULL,   -- markdown ES
+  body_en_md TEXT NOT NULL,   -- markdown EN
+  tags_json TEXT,             -- string[]
+  sort INTEGER NOT NULL DEFAULT 0,
+  active INTEGER NOT NULL DEFAULT 1, -- 0/1
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_about_active_sort ON about(active, sort, created_at);
 `);
 
 
@@ -871,6 +906,201 @@ export function dbUpdateNew(id: string, input: Partial<Omit<New, 'id' | 'created
 
 export function dbRemoveNew(id: string): void {
   db.prepare(`DELETE FROM news WHERE id=?`).run(id);
+}
+
+export function dbListRules(): Rule[] {
+  const rows = db.prepare(`
+    SELECT * FROM rules
+     WHERE active = 1
+     ORDER BY sort ASC, created_at DESC
+  `).all() as any[];
+  return rows.map(rowToRule);
+}
+
+export function dbGetRuleBySlug(slug: string): Rule | undefined {
+  const r = db.prepare(`SELECT * FROM rules WHERE slug=? AND active=1`).get(slug) as any;
+  return r ? rowToRule(r) : undefined;
+}
+
+export function dbListAllRules(): Rule[] {
+  const rows = db.prepare(`SELECT * FROM rules ORDER BY sort ASC, created_at DESC`).all() as any[];
+  return rows.map(rowToRule);
+}
+
+export function dbGetRule(id: string): Rule | undefined {
+  const r = db.prepare(`SELECT * FROM rules WHERE id=?`).get(id) as any;
+  return r ? rowToRule(r) : undefined;
+}
+
+export function dbCreateRule(input: Omit<Rule, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Rule {
+  const id = input.id ?? ('rl_' + Math.random().toString(36).slice(2, 8));
+  const now = nowIso();
+
+  db.prepare(`
+    INSERT INTO rules (
+      id, slug, title_es, title_en, body_es, body_en,
+      category, tags_json, sort, active, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    id,
+    input.slug,
+    input.title.es, input.title.en,
+    input.body.es, input.body.en,
+    input.category ?? null,
+    input.tags ? JSON.stringify(input.tags) : null,
+    input.sort ?? 0,
+    boolToInt(!!input.active),
+    now, now
+  );
+
+  return dbGetRule(id)!;
+}
+
+export function dbUpdateRule(id: string, patch: Partial<Omit<Rule, 'id' | 'createdAt' | 'updatedAt'>>): Rule {
+  const cur = dbGetRule(id);
+  if (!cur) throw new Error('Not found');
+
+  const merged: Rule = {
+    ...cur,
+    ...patch,
+    id,
+    title: { es: patch.title?.es ?? cur.title.es, en: patch.title?.en ?? cur.title.en },
+    body: { es: patch.body?.es ?? cur.body.es, en: patch.body?.en ?? cur.body.en },
+    tags: patch.tags ?? cur.tags ?? [],
+    sort: patch.sort ?? cur.sort,
+    active: patch.active ?? cur.active,
+    updatedAt: nowIso(),
+  };
+
+  db.prepare(`
+    UPDATE rules SET
+      slug=@slug, title_es=@title_es, title_en=@title_en,
+      body_es=@body_es, body_en=@body_en,
+      category=@category, tags_json=@tags_json,
+      sort=@sort, active=@active, updated_at=@updated_at
+    WHERE id=@id
+  `).run({
+    id: merged.id,
+    slug: merged.slug,
+    title_es: merged.title.es,
+    title_en: merged.title.en,
+    body_es: merged.body.es,
+    body_en: merged.body.en,
+    category: merged.category ?? null,
+    tags_json: merged.tags ? JSON.stringify(merged.tags) : null,
+    sort: merged.sort ?? 0,
+    active: boolToInt(!!merged.active),
+    updated_at: merged.updatedAt,
+  });
+
+  return dbGetRule(id)!;
+}
+
+export function dbRemoveRule(id: string): void {
+  db.prepare(`DELETE FROM rules WHERE id=?`).run(id);
+}
+
+export function dbListAboutAll(): AboutEntry[] {
+  const rows = db.prepare(`
+    SELECT * FROM about
+    ORDER BY sort ASC, created_at DESC
+  `).all() as any[];
+  return rows.map(rowToAbout);
+}
+
+export function dbListAboutPublic(): AboutEntry[] {
+  const rows = db.prepare(`
+    SELECT * FROM about
+    WHERE active = 1
+    ORDER BY sort ASC, created_at DESC
+  `).all() as any[];
+  return rows.map(rowToAbout);
+}
+
+export function dbGetAbout(id: string): AboutEntry | undefined {
+  const r = db.prepare(`SELECT * FROM about WHERE id=?`).get(id) as any;
+  return r ? rowToAbout(r) : undefined;
+}
+
+export function dbCreateAbout(input: Omit<AboutEntry, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): AboutEntry {
+  const id = input.id ?? ('ab_' + Math.random().toString(36).slice(2, 8));
+  const now = nowIso();
+
+  db.prepare(`
+    INSERT INTO about (
+      id, slug, title_es, title_en, role, avatar,
+      body_es_md, body_en_md, tags_json, sort, active, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    id,
+    input.slug,
+    input.title.es, input.title.en,
+    input.role ?? null,
+    input.avatar ?? null,
+    input.body.es, input.body.en,
+    (input.tags && input.tags.length) ? JSON.stringify(input.tags) : null,
+    input.sort ?? 0,
+    boolToInt(!!input.active),
+    now, now
+  );
+
+  return dbGetAbout(id)!;
+}
+
+export function dbUpdateAbout(id: string, patch: Partial<Omit<AboutEntry, 'id' | 'createdAt' | 'updatedAt'>>): AboutEntry {
+  const cur = dbGetAbout(id);
+  if (!cur) throw new Error('Not found');
+
+  const merged: AboutEntry = {
+    ...cur,
+    ...patch,
+    id,
+    title: {
+      es: patch.title?.es ?? cur.title.es,
+      en: patch.title?.en ?? cur.title.en,
+    },
+    body: {
+      es: patch.body?.es ?? cur.body.es,
+      en: patch.body?.en ?? cur.body.en,
+    },
+    role: patch.role ?? cur.role ?? null,
+    avatar: patch.avatar ?? cur.avatar ?? null,
+    tags: patch.tags ?? cur.tags ?? [],
+    sort: Number.isFinite(patch.sort as number) ? Number(patch.sort) : cur.sort,
+    active: typeof patch.active === 'boolean' ? patch.active : cur.active,
+    updatedAt: nowIso(),
+  };
+
+  db.prepare(`
+    UPDATE about SET
+      slug=@slug,
+      title_es=@title_es, title_en=@title_en,
+      role=@role, avatar=@avatar,
+      body_es_md=@body_es_md, body_en_md=@body_en_md,
+      tags_json=@tags_json,
+      sort=@sort, active=@active,
+      updated_at=@updated_at
+    WHERE id=@id
+  `).run({
+    id: merged.id,
+    slug: merged.slug,
+    title_es: merged.title.es,
+    title_en: merged.title.en,
+    role: merged.role ?? null,
+    avatar: merged.avatar ?? null,
+    body_es_md: merged.body.es,
+    body_en_md: merged.body.en,
+    tags_json: (merged.tags && merged.tags.length) ? JSON.stringify(merged.tags) : null,
+    sort: merged.sort,
+    active: boolToInt(!!merged.active),
+    updated_at: merged.updatedAt,
+  });
+
+  return dbGetAbout(id)!;
+}
+
+export function dbRemoveAbout(id: string): void {
+  db.prepare(`DELETE FROM about WHERE id=?`).run(id);
 }
 
 function pruneDonationFromPacks(donationId: string): number {
