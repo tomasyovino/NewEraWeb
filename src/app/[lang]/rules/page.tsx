@@ -64,10 +64,10 @@ export default async function RulesPage({ params }: { params: { lang: string } }
                             <section key={r.id} id={`rule-${r.slug}`}>
                                 <h2 style={{ fontSize: 22, lineHeight: 1.2, marginBottom: 8 }}>{r.title}</h2>
 
-                                {(r.category || (r.tags && r.tags.length)) && (
+                                {(Boolean(r.category) || ((r.tags?.length ?? 0) > 0)) && (
                                     <div className="flex gap-2 flex-wrap mb-2">
                                         {r.category && <span className="chip">#{r.category}</span>}
-                                        {r.tags.map((t) => <span className="chip" key={t}>#{t}</span>)}
+                                        {r.tags?.map(t => <span className="chip" key={t}>#{t}</span>)}
                                     </div>
                                 )}
 
