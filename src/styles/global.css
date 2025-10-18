@@ -1497,33 +1497,66 @@ html {
   margin: 1.25rem 0 0.5rem;
 }
 
-.prose h1, .prose-md h1 { font-size: 1.9rem; }
-.prose h2, .prose-md h2 { font-size: 1.5rem; border-top: 1px solid var(--prose-stroke); padding-top: .75rem; }
-.prose h3, .prose-md h3 { font-size: 1.25rem; }
-.prose h4, .prose-md h4 { font-size: 1.1rem; }
+.prose h1,
+.prose-md h1 {
+  font-size: 1.9rem;
+}
 
-.prose ul, .prose-md ul,
-.prose ol, .prose-md ol { margin: 0.75rem 0 0.75rem 1.25rem; }
+.prose h2,
+.prose-md h2 {
+  font-size: 1.5rem;
+  border-top: 1px solid var(--prose-stroke);
+  padding-top: .75rem;
+}
 
-.prose ul, .prose-md ul { 
+.prose h3,
+.prose-md h3 {
+  font-size: 1.25rem;
+}
+
+.prose h4,
+.prose-md h4 {
+  font-size: 1.1rem;
+}
+
+.prose ul,
+.prose-md ul,
+.prose ol,
+.prose-md ol {
+  margin: 0.75rem 0 0.75rem 1.25rem;
+}
+
+.prose ul,
+.prose-md ul {
   list-style: disc;
   list-style-position: outside;
   padding-left: 1.25rem;
 }
 
-.prose li, .prose-md li { margin: .25rem 0; }
-.prose li > ul, .prose-md li > ul,
-.prose li > ol, .prose-md li > ol { margin-top: .25rem; }
+.prose li,
+.prose-md li {
+  margin: .25rem 0;
+}
 
-.prose strong, .prose-md strong {
+.prose li>ul,
+.prose-md li>ul,
+.prose li>ol,
+.prose-md li>ol {
+  margin-top: .25rem;
+}
+
+.prose strong,
+.prose-md strong {
   font-weight: 800;
 }
 
-.prose em, .prose-md em  {
+.prose em,
+.prose-md em {
   font-style: italic;
 }
 
-.prose blockquote, .prose-md blockquote {
+.prose blockquote,
+.prose-md blockquote {
   margin: 1rem 0;
   padding: .75rem 1rem;
   border-left: 3px solid var(--prose-stroke);
@@ -1532,23 +1565,27 @@ html {
   border-radius: 8px;
 }
 
-.prose hr, .prose-md hr {
+.prose hr,
+.prose-md hr {
   border: 0;
   border-top: 1px solid var(--prose-stroke);
   margin: 1.25rem 0;
 }
 
-.prose a, .prose-md a {
+.prose a,
+.prose-md a {
   color: var(--prose-accent);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.prose a:hover, .prose-md a:hover {
+.prose a:hover,
+.prose-md a:hover {
   opacity: .9;
 }
 
-.prose code, .prose-md code {
+.prose code,
+.prose-md code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: .9em;
   background: rgba(255, 255, 255, .06);
@@ -1557,7 +1594,8 @@ html {
   border-radius: 6px;
 }
 
-.prose pre, .prose-md pre {
+.prose pre,
+.prose-md pre {
   overflow-x: auto;
   padding: .9rem 1rem;
   border-radius: 10px;
@@ -1566,13 +1604,15 @@ html {
   margin: 1rem 0;
 }
 
-.prose pre code, .prose-md pre code {
+.prose pre code,
+.prose-md pre code {
   background: transparent;
   border: 0;
   padding: 0;
 }
 
-.prose img, .prose-md img {
+.prose img,
+.prose-md img {
   max-width: 100%;
   height: auto;
   border-radius: 10px;
@@ -1581,7 +1621,8 @@ html {
   margin: .5rem 0;
 }
 
-.prose table, .prose-md table {
+.prose table,
+.prose-md table {
   width: 100%;
   border-collapse: collapse;
   margin: .75rem 0;
@@ -1596,82 +1637,98 @@ html {
   padding: .5rem .6rem;
 }
 
-.prose thead th, .prose-md thead th {
+.prose thead th,
+.prose-md thead th {
   background: rgba(255, 255, 255, .04);
   text-align: left;
 }
 
-.prose ul.contains-task-list, .prose-md ul.contains-task-list {
+.prose ul.contains-task-list,
+.prose-md ul.contains-task-list {
   list-style: none;
   margin-left: .25rem;
 }
 
-.prose li.task-list-item, .prose-md li.task-list-item {
+.prose li.task-list-item,
+.prose-md li.task-list-item {
   display: flex;
   gap: .5rem;
   align-items: flex-start;
 }
 
-.prose li.task-list-item>input[type="checkbox"], .prose-md li.task-list-item>input[type="checkbox"] {
+.prose li.task-list-item>input[type="checkbox"],
+.prose-md li.task-list-item>input[type="checkbox"] {
   margin-top: .35rem;
   accent-color: var(--primary, #7dd3fc);
 }
 
-.prose sup[data-footnote-ref], .prose-md sup[data-footnote-ref] {
+.prose sup[data-footnote-ref],
+.prose-md sup[data-footnote-ref] {
   font-size: .8em;
 }
 
-.prose section.footnotes, .prose-md section.footnotes {
+.prose section.footnotes,
+.prose-md section.footnotes {
   margin-top: 1rem;
   border-top: 1px solid var(--prose-stroke);
   padding-top: .5rem;
 }
 
-.prose section.footnotes ol, .prose-md section.footnotes ol {
+.prose section.footnotes ol,
+.prose-md section.footnotes ol {
   margin-left: 1rem;
 }
 
-.prose figure, .prose-md figure {
+.prose figure,
+.prose-md figure {
   margin: 1rem 0;
 }
 
-.prose figure>img, .prose-md figure>img {
+.prose figure>img,
+.prose-md figure>img {
   margin: 0;
 }
 
-.prose figcaption, .prose-md figcaption {
+.prose figcaption,
+.prose-md figcaption {
   color: var(--prose-muted);
   font-size: .9em;
   text-align: center;
   margin-top: .4rem;
 }
 
-.prose dl, .prose-md dl {
+.prose dl,
+.prose-md dl {
   margin: .75rem 0;
 }
 
-.prose dt, .prose-md dt {
+.prose dt,
+.prose-md dt {
   font-weight: 700;
 }
 
-.prose dd, .prose-md dd {
+.prose dd,
+.prose-md dd {
   margin: 0 0 .5rem 1rem;
   color: var(--prose-muted);
 }
 
-.prose details, .prose-md details {
+.prose details,
+.prose-md details {
   border: 1px solid var(--prose-stroke);
   border-radius: 8px;
   padding: .5rem .75rem;
   background: rgba(255, 255, 255, .03);
 }
 
-.prose summary, .prose-md summary {
+.prose summary,
+.prose-md summary {
   cursor: pointer;
   font-weight: 700;
 }
 
-.prose kbd, .prose-md kbd {
+.prose kbd,
+.prose-md kbd {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: .85em;
   border: 1px solid var(--prose-stroke);
@@ -1680,8 +1737,68 @@ html {
   border-radius: 6px;
 }
 
-.prose table, .prose-md table {
+.prose table,
+.prose-md table {
   display: block;
   overflow-x: auto;
   white-space: nowrap;
+}
+
+/* === Dropdown simple para la nav === */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn:focus-visible {
+  color: var(--ink);
+  background: rgba(255, 255, 255, .04);
+  border-color: var(--stroke);
+  outline: none;
+}
+
+.caret-small {
+  margin-left: 6px;
+  opacity: .7;
+  font-size: .9em;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 180px;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .03));
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .04);
+  z-index: 120;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--ink);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus-visible {
+  background: rgba(255, 255, 255, .06);
+  border-color: var(--stroke);
+  outline: none;
 }

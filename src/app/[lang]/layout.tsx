@@ -3,18 +3,16 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import fs from 'node:fs';
 import path from 'node:path';
-import { LangSwitch, WikiFab, DiscordFab } from '@/components';
-import { AnchorToHome } from '@/components';
+import { LangSwitch, WikiFab, DiscordFab, AnchorToHome, PaypalFab, CommunityMenu } from '@/components';
 import Image from 'next/image';
-import PaypalFab from '@/components/PaypalFab';
 
-function t(lang: 'es'|'en') {
+function t(lang: 'es' | 'en') {
   const p = path.join(process.cwd(), 'i18n', `${lang}.json`);
   return JSON.parse(fs.readFileSync(p, 'utf8'));
 }
 
 export default function RootLayout({ children, params }: { children: ReactNode; params: { lang: string } }) {
-  const lang = (params.lang === 'en' ? 'en' : 'es') as 'es'|'en';
+  const lang = (params.lang === 'en' ? 'en' : 'es') as 'es' | 'en';
   const dict = t(lang);
 
   return (
@@ -43,14 +41,14 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
               {/* nav pills (anchor links) */}
               <nav className="nav">
                 <Link href={`/${lang}/news`}>{dict.nav.news}</Link>
-                <AnchorToHome lang={lang} hash="events"   className="">{dict.nav.events}</AnchorToHome>
+                <AnchorToHome lang={lang} hash="events" className="">{dict.nav.events}</AnchorToHome>
                 <Link href={`/${lang}/donate`}>{dict.nav.donate}</Link>
-                <AnchorToHome lang={lang} hash="community" className="">{dict.nav.community}</AnchorToHome>
+                <CommunityMenu lang={lang} />
               </nav>
             </div>
 
             {/* CENTRO: brand compacto */}
-            <Link href={`/${lang}`} className="brand" style={{color:'#bcd7ff'}}>
+            <Link href={`/${lang}`} className="brand" style={{ color: '#bcd7ff' }}>
               <Image src="/images/logo.png" alt="New Era" width={40} height={40} className="icon-glow" />
             </Link>
 
@@ -72,7 +70,7 @@ export default function RootLayout({ children, params }: { children: ReactNode; 
         </main>
 
         <footer className="container mt-16 py-8 text-sm" id="footer">
-          <div style={{borderTop:'1px solid var(--stroke)', paddingTop: '16px', color:'var(--muted)'}}>
+          <div style={{ borderTop: '1px solid var(--stroke)', paddingTop: '16px', color: 'var(--muted)' }}>
             © <span suppressHydrationWarning>{new Date().getFullYear()}</span> New Era
           </div>
         </footer>
