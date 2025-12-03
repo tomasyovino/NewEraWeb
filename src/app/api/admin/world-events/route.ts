@@ -2,21 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminAuth } from '@/app/api/_utils/adminAuth';
 import { worldEventListSchema } from '@/lib/schemas';
 import { worldEventsCreateSchema } from '@/app/api/_utils/worldEventSchemas';
-
-const VM_API_BASE = process.env.VM_API_BASE_URL!;
-const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
+import { fetchFromVM } from '@/helpers/fetchHelpers';
 
 export async function GET(req: NextRequest) {
     const guard = requireAdminAuth(req);
     if (guard) return guard;
 
     try {
-        const res = await fetch(`${VM_API_BASE}/admin/world-events`, {
-            headers: {
-                'x-internal-key': INTERNAL_KEY,
-            },
-            cache: 'no-store',
-        });
+        const res = await fetchFromVM(`/admin/world-events`);
 
         if (!res.ok) {
             return NextResponse.json(
@@ -48,11 +41,10 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const res = await fetch(`${VM_API_BASE}/admin/world-events`, {
+        const res = await fetchFromVM(`/admin/world-events`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                'x-internal-key': INTERNAL_KEY,
             },
             body: JSON.stringify(input),
         });

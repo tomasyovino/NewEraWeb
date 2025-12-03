@@ -1,20 +1,10 @@
 import { NextResponse } from 'next/server';
 import { ruleSchema } from '@/lib/schemas';
-
-const VM_API_BASE = process.env.VM_API_BASE_URL!;
-const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
+import { fetchFromVM } from '@/helpers/fetchHelpers';
 
 export async function GET(_req: Request, { params }: { params: { slug: string } }) {
     try {
-        const res = await fetch(
-            `${VM_API_BASE}/rules/${encodeURIComponent(params.slug)}`,
-            {
-                headers: {
-                    'x-internal-key': INTERNAL_KEY,
-                },
-                cache: 'no-store',
-            },
-        );
+        const res = await fetchFromVM(`/rules/${encodeURIComponent(params.slug)}`);
 
         if (res.status === 404) {
             return NextResponse.json({ error: 'Not found' }, { status: 404 });

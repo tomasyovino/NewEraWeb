@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server';
 import { donationListSchema } from '@/lib/schemas';
-
-const VM_API_BASE = process.env.VM_API_BASE_URL!;
-const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
+import { fetchFromVM } from '@/helpers/fetchHelpers';
 
 export async function GET() {
     try {
-        const res = await fetch(`${VM_API_BASE}/donations`, {
-            headers: {
-                'x-internal-key': INTERNAL_KEY,
-            },
-            cache: 'no-store',
-        });
+        const res = await fetchFromVM(`/donations`);
 
         if (!res.ok) {
             return NextResponse.json(

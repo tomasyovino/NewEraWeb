@@ -2,24 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminAuth } from '@/app/api/_utils/adminAuth';
 import { donationSchema } from '@/lib/schemas';
 import { donationUpdateSchema } from '@/app/api/_utils/donationSchemas';
-
-const VM_API_BASE = process.env.VM_API_BASE_URL!;
-const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
+import { fetchFromVM } from '@/helpers/fetchHelpers';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
     const guard = requireAdminAuth(req);
     if (guard) return guard;
 
     try {
-        const res = await fetch(
-            `${VM_API_BASE}/admin/donations/${encodeURIComponent(params.id)}`,
-            {
-                headers: {
-                    'x-internal-key': INTERNAL_KEY,
-                },
-                cache: 'no-store',
-            },
-        );
+        const res = await fetchFromVM(`/admin/donations/${encodeURIComponent(params.id)}`);
 
         if (res.status === 404) {
             return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -55,13 +45,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     try {
-        const res = await fetch(
-            `${VM_API_BASE}/admin/donations/${encodeURIComponent(params.id)}`,
+        const res = await fetchFromVM(
+            `/admin/donations/${encodeURIComponent(params.id)}`,
             {
                 method: 'PUT',
                 headers: {
                     'content-type': 'application/json',
-                    'x-internal-key': INTERNAL_KEY,
                 },
                 body: JSON.stringify(patch),
             },
@@ -86,13 +75,10 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     if (guard) return guard;
 
     try {
-        const res = await fetch(
-            `${VM_API_BASE}/admin/donations/${encodeURIComponent(params.id)}`,
+        const res = await fetchFromVM(
+            `/admin/donations/${encodeURIComponent(params.id)}`,
             {
                 method: 'DELETE',
-                headers: {
-                    'x-internal-key': INTERNAL_KEY,
-                },
             },
         );
 

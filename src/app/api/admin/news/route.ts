@@ -2,21 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminAuth } from '@/app/api/_utils/adminAuth';
 import { newListSchema } from '@/lib/schemas';
 import { newCreateSchema } from '../../_utils/newSchemas';
-
-const VM_API_BASE = process.env.VM_API_BASE_URL!;
-const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
+import { fetchFromVM } from '@/helpers/fetchHelpers';
 
 export async function GET(req: NextRequest) {
     const guard = requireAdminAuth(req);
     if (guard) return guard;
 
     try {
-        const res = await fetch(`${VM_API_BASE}/admin/news`, {
-            headers: {
-                'x-internal-key': INTERNAL_KEY,
-            },
-            cache: 'no-store',
-        });
+        const res = await fetchFromVM(`/admin/news`);
 
         if (!res.ok) {
             return NextResponse.json(
@@ -29,7 +22,6 @@ export async function GET(req: NextRequest) {
         const data = newListSchema.parse(raw);
         return NextResponse.json(data);
     } catch (err: any) {
-        console.log(err?.message)
         return NextResponse.json({ error: err?.message ?? 'Internal error' }, { status: 500 });
     }
 }
@@ -49,11 +41,10 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const res = await fetch(`${VM_API_BASE}/admin/news`, {
+        const res = await fetchFromVM(`/admin/news`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                'x-internal-key': INTERNAL_KEY,
             },
             body: JSON.stringify(input),
         });

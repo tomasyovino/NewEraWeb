@@ -1,23 +1,13 @@
 import { NextResponse } from 'next/server';
 import { worldEventSchema } from '@/lib/schemas';
-
-const VM_API_BASE = process.env.VM_API_BASE_URL!;
-const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
+import { fetchFromVM } from '@/helpers/fetchHelpers';
 
 export async function GET(
     _req: Request,
     { params }: { params: { id: string } }
 ) {
     try {
-        const res = await fetch(
-            `${VM_API_BASE}/world-events/${encodeURIComponent(params.id)}`,
-            {
-                headers: {
-                    'x-internal-key': INTERNAL_KEY,
-                },
-                cache: 'no-store',
-            },
-        );
+        const res = await fetchFromVM(`/world-events/${encodeURIComponent(params.id)}`);
 
         if (res.status === 404) {
             return NextResponse.json({ error: 'Not found' }, { status: 404 });

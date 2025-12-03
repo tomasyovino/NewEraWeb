@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminAuth } from '@/app/api/_utils/adminAuth';
 import { ruleListSchema } from '@/lib/schemas';
 import { ruleCreateSchema } from '@/app/api/_utils/ruleSchemas';
+import { fetchFromVM } from '@/helpers/fetchHelpers';
 
 const VM_API_BASE = process.env.VM_API_BASE_URL!;
 const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
@@ -11,12 +12,7 @@ export async function GET(req: NextRequest) {
     if (guard) return guard;
 
     try {
-        const res = await fetch(`${VM_API_BASE}/admin/rules`, {
-            headers: {
-                'x-internal-key': INTERNAL_KEY,
-            },
-            cache: 'no-store',
-        });
+        const res = await fetchFromVM(`/admin/rules`);
 
         if (!res.ok) {
             return NextResponse.json(
@@ -48,11 +44,10 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const res = await fetch(`${VM_API_BASE}/admin/rules`, {
+        const res = await fetchFromVM(`/admin/rules`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                'x-internal-key': INTERNAL_KEY,
             },
             body: JSON.stringify(input),
         });
