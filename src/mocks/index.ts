@@ -1,5 +1,0 @@
-export { default as eventsMock } from './events.json'
-export { default as worldEventsMock } from './world-events.json'
-export { default as donationsMock } from './donations.json'
-export { default as packsMock } from './packs.json'
-export { default as newsMock } from './news.json'
