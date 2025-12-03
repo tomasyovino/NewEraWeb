@@ -16,6 +16,7 @@ export type WeeklyEvent = {
   durationMinutes?: number;
   featured?: boolean;
   icon?: string;
+  sphereCmd?: string;
 };
 
 export type EventSlot = {
@@ -42,6 +43,8 @@ export interface WorldEvent {
   highlights?: LocalizedString[];
   rewards?: LocalizedString[];
   warnings?: LocalizedString[];
+  sphereStartCmd?: string;
+  sphereEndCmd?: string; 
 }
 
 export type DonationScope = 'personal' | 'clan' | 'both';

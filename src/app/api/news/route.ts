@@ -1,6 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { dbListAllNews } from '@/db/sqlite';
 import { newListSchema } from '@/lib/schemas';
+
+const VM_API_BASE = process.env.VM_API_BASE_URL!;
+const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
 
 export async function GET(req: NextRequest) {
     try {
@@ -16,16 +18,31 @@ export async function GET(req: NextRequest) {
         const limit = Number.isFinite(limitParam) && limitParam > 0 ? Math.min(limitParam, 50) : undefined;
         const page = Number.isFinite(pageParam) && pageParam > 0 ? pageParam : 1;
 
-        let items = dbListAllNews();
+        const res = await fetch(`${VM_API_BASE}/news`, {
+            headers: {
+                'x-internal-key': INTERNAL_KEY,
+            },
+            cache: 'no-store',
+        });
+
+        if (!res.ok) {
+            return NextResponse.json(
+                { error: `Upstream error (${res.status})` },
+                { status: 502 },
+            );
+        }
+
+        const raw = await res.json();
+        let items = newListSchema.parse(raw);
 
         if (onlyPublished) {
-            items = items.filter(n => n.publishedAt && Date.now() >= Date.parse(n.publishedAt));
+            items = items.filter((n: any) => n.publishedAt && Date.now() >= Date.parse(n.publishedAt));
         }
         if (slug) {
-            items = items.filter(n => n.slug.toLowerCase() === slug);
+            items = items.filter((n: any) => n.slug.toLowerCase() === slug);
         }
         if (q) {
-            items = items.filter(n => {
+            items = items.filter((n: any) => {
                 const hay = [
                     n.slug,
                     n.title.es, n.title.en,
@@ -37,7 +54,7 @@ export async function GET(req: NextRequest) {
             });
         }
 
-        items.sort((a, b) => {
+        items.sort((a: any, b: any) => {
             const ap = a.publishedAt ? Date.parse(a.publishedAt) : 0;
             const bp = b.publishedAt ? Date.parse(b.publishedAt) : 0;
             if (bp !== ap) return bp - ap;
@@ -58,9 +75,8 @@ export async function GET(req: NextRequest) {
         const end = start + effLimit;
         const pageItems = items.slice(start, end);
 
-        const data = newListSchema.parse(pageItems);
         return NextResponse.json({
-            items: data,
+            items: pageItems,
             total,
             page: safePage,
             limit: effLimit,

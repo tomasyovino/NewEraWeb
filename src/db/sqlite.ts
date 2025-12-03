@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS weekly_events (
   times_json TEXT NOT NULL,            -- JSON string[] "HH:mm"
   duration_minutes INTEGER,
   featured INTEGER NOT NULL DEFAULT 0, -- 0/1
-  icon TEXT
+  icon TEXT,
+  sphere_cmd TEXT                      -- comando Sphere a ejecutar al inicio
 );
 
 CREATE TABLE IF NOT EXISTS world_events (
@@ -48,7 +49,9 @@ CREATE TABLE IF NOT EXISTS world_events (
   banner TEXT,
   highlights_json TEXT,     -- JSON LocalizedString[]
   rewards_json TEXT,        -- JSON LocalizedString[]
-  warnings_json TEXT        -- JSON LocalizedString[]
+  warnings_json TEXT,       -- JSON LocalizedString[]
+  sphere_start_cmd TEXT,    -- comando a ejecutar al inicio (opcional)
+  sphere_end_cmd   TEXT     -- comando a ejecutar al fin (opcional)
 );
 
 CREATE INDEX IF NOT EXISTS idx_world_events_ends_at   ON world_events(ends_at);
@@ -380,6 +383,22 @@ export function dbListWeekly(): WeeklyEvent[] {
     durationMinutes: r.duration_minutes ?? undefined,
     featured: intToBool(r.featured),
     icon: r.icon ?? undefined,
+    sphereCmd: undefined,
+  }));
+}
+
+export function dbListAllWeekly(): WeeklyEvent[] {
+  const rows = db.prepare(`SELECT * FROM weekly_events`).all() as any[];
+  return rows.map(r => ({
+    id: r.id,
+    name: ls(r.name_es, r.name_en),
+    description: (r.desc_es || r.desc_en) ? ls(r.desc_es, r.desc_en) : undefined,
+    dayOfWeek: r.day_of_week,
+    times: parseJsonArray<string[]>(r.times_json, []),
+    durationMinutes: r.duration_minutes ?? undefined,
+    featured: intToBool(r.featured),
+    icon: r.icon ?? undefined,
+    sphereCmd: r.sphere_cmd ?? undefined,
   }));
 }
 
@@ -402,8 +421,8 @@ export function dbCreateWeekly(input: Omit<WeeklyEvent, 'id'> & { id?: string })
   const id = input.id ?? ('ev_' + Math.random().toString(36).slice(2, 8));
   db.prepare(`
     INSERT INTO weekly_events
-    (id, name_es, name_en, desc_es, desc_en, day_of_week, times_json, duration_minutes, featured, icon)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (id, name_es, name_en, desc_es, desc_en, day_of_week, times_json, duration_minutes, featured, icon, sphere_cmd)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     id,
     input.name.es, input.name.en,
@@ -413,6 +432,7 @@ export function dbCreateWeekly(input: Omit<WeeklyEvent, 'id'> & { id?: string })
     input.durationMinutes ?? null,
     boolToInt(input.featured),
     input.icon ?? null,
+    input.sphereCmd ?? null,
   );
   return dbGetWeekly(id)!;
 }
@@ -421,7 +441,7 @@ export function dbUpdateWeekly(id: string, input: Omit<WeeklyEvent, 'id'> & { id
   db.prepare(`
     UPDATE weekly_events
       SET name_es=?, name_en=?, desc_es=?, desc_en=?, day_of_week=?, times_json=?,
-          duration_minutes=?, featured=?, icon=?
+          duration_minutes=?, featured=?, icon=?, sphere_cmd=?
       WHERE id=?
   `).run(
     input.name.es, input.name.en,
@@ -431,6 +451,7 @@ export function dbUpdateWeekly(id: string, input: Omit<WeeklyEvent, 'id'> & { id
     input.durationMinutes ?? null,
     boolToInt(input.featured),
     input.icon ?? null,
+    input.sphereCmd ?? null,
     id,
   );
   return dbGetWeekly(id)!;
@@ -467,6 +488,8 @@ export function dbListWorld(
     highlights: parseJsonArray<LocalizedString[]>(r.highlights_json, []),
     rewards: parseJsonArray<LocalizedString[]>(r.rewards_json, []),
     warnings: parseJsonArray<LocalizedString[]>(r.warnings_json, []),
+    sphereStartCmd: undefined,
+    sphereEndCmd: undefined,
   }));
 }
 
@@ -485,6 +508,8 @@ export function dbListAllWorld(): WorldEvent[] {
     highlights: parseJsonArray<LocalizedString[]>(r.highlights_json, []),
     rewards: parseJsonArray<LocalizedString[]>(r.rewards_json, []),
     warnings: parseJsonArray<LocalizedString[]>(r.warnings_json, []),
+    sphereStartCmd: r.sphere_start_cmd ?? undefined,
+    sphereEndCmd:   r.sphere_end_cmd   ?? undefined,
   }));
 }
 
@@ -512,8 +537,8 @@ export function dbCreateWorld(input: Omit<WorldEvent, 'id'> & { id?: string }): 
   db.prepare(`
     INSERT INTO world_events
     (id, name_es, name_en, desc_es, desc_en, headline_es, headline_en, location_es, location_en,
-     starts_at, ends_at, featured, banner, highlights_json, rewards_json, warnings_json)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+     starts_at, ends_at, featured, banner, highlights_json, rewards_json, warnings_json, sphere_start_cmd, sphere_end_cmd)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     id,
     input.name.es, input.name.en,
@@ -526,6 +551,8 @@ export function dbCreateWorld(input: Omit<WorldEvent, 'id'> & { id?: string }): 
     input.highlights ? JSON.stringify(input.highlights) : null,
     input.rewards ? JSON.stringify(input.rewards) : null,
     input.warnings ? JSON.stringify(input.warnings) : null,
+    input.sphereStartCmd ?? null,
+    input.sphereEndCmd ?? null,
   );
   return dbGetWorld(id)!;
 }
@@ -535,7 +562,7 @@ export function dbUpdateWorld(id: string, input: Omit<WorldEvent, 'id'> & { id?:
     UPDATE world_events
       SET name_es=?, name_en=?, desc_es=?, desc_en=?, headline_es=?, headline_en=?,
           location_es=?, location_en=?, starts_at=?, ends_at=?, featured=?, banner=?,
-          highlights_json=?, rewards_json=?, warnings_json=?
+          highlights_json=?, rewards_json=?, warnings_json=?, sphere_start_cmd=?, sphere_end_cmd=?
       WHERE id=?
   `).run(
     input.name.es, input.name.en,
@@ -547,6 +574,8 @@ export function dbUpdateWorld(id: string, input: Omit<WorldEvent, 'id'> & { id?:
     input.highlights ? JSON.stringify(input.highlights) : null,
     input.rewards ? JSON.stringify(input.rewards) : null,
     input.warnings ? JSON.stringify(input.warnings) : null,
+    input.sphereStartCmd ?? null,
+    input.sphereEndCmd ?? null,
     id,
   );
   return dbGetWorld(id)!;

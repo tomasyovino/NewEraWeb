@@ -1,16 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminAuth } from '@/app/api/_utils/adminAuth';
-import { dbListAllNews, dbCreateNew } from '@/db/sqlite';
 import { newListSchema } from '@/lib/schemas';
 import { newCreateSchema } from '../../_utils/newSchemas';
+
+const VM_API_BASE = process.env.VM_API_BASE_URL!;
+const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
 
 export async function GET(req: NextRequest) {
     const guard = requireAdminAuth(req);
     if (guard) return guard;
 
     try {
-        const list = dbListAllNews();
-        const data = newListSchema.parse(list);
+        const res = await fetch(`${VM_API_BASE}/admin/news`, {
+            headers: {
+                'x-internal-key': INTERNAL_KEY,
+            },
+            cache: 'no-store',
+        });
+
+        if (!res.ok) {
+            return NextResponse.json(
+                { error: `Upstream error (${res.status})` },
+                { status: 502 },
+            );
+        }
+
+        const raw = await res.json();
+        const data = newListSchema.parse(raw);
         return NextResponse.json(data);
     } catch (err: any) {
         console.log(err?.message)
@@ -22,13 +38,32 @@ export async function POST(req: NextRequest) {
     const guard = requireAdminAuth(req);
     if (guard) return guard;
 
+    let input: unknown;
+
     try {
         const payload = await req.json();
-        const input = newCreateSchema.parse(payload);
-        const created = dbCreateNew(input);
-        return NextResponse.json(created, { status: 201 });
+        input = newCreateSchema.parse(payload);
     } catch (err: any) {
         const msg = err?.issues ? err.issues : err?.message;
         return NextResponse.json({ error: msg ?? 'Invalid payload' }, { status: 400 });
+    }
+
+    try {
+        const res = await fetch(`${VM_API_BASE}/admin/news`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'x-internal-key': INTERNAL_KEY,
+            },
+            body: JSON.stringify(input),
+        });
+
+        const data = await res.json().catch(() => ({}));
+        return NextResponse.json(data, { status: res.status });
+    } catch (err: any) {
+        return NextResponse.json(
+            { error: err?.message ?? 'Upstream error' },
+            { status: 502 },
+        );
     }
 }

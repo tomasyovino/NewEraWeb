@@ -14,7 +14,7 @@ const toLocalInput = (iso?: string) => {
   if (!iso) return '';
   const d = new Date(iso);
   const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 const toISO = (local: string) => new Date(local).toISOString();
 
@@ -28,7 +28,7 @@ function ListEditor({
   const [es, setEs] = useState(''); const [en, setEn] = useState('');
   const add = () => {
     if (!es.trim() && !en.trim()) return;
-    onChange([ ...value, { es: es.trim(), en: en.trim() } ]);
+    onChange([...value, { es: es.trim(), en: en.trim() }]);
     setEs(''); setEn('');
   };
   const del = (idx: number) => onChange(value.filter((_, i) => i !== idx));
@@ -36,9 +36,9 @@ function ListEditor({
     <div className="grid gap-2">
       <span>{label}</span>
       <div className="grid md:grid-cols-2 gap-2">
-        <input className="input" placeholder="ES…" value={es} onChange={e=>setEs(e.target.value)} />
+        <input className="input" placeholder="ES…" value={es} onChange={e => setEs(e.target.value)} />
         <div className="flex gap-2">
-          <input className="input flex-1" placeholder="EN…" value={en} onChange={e=>setEn(e.target.value)} />
+          <input className="input flex-1" placeholder="EN…" value={en} onChange={e => setEn(e.target.value)} />
           <button type="button" className="btn btn-ghost" onClick={add}>Añadir</button>
         </div>
       </div>
@@ -47,7 +47,7 @@ function ListEditor({
           <div key={i} className="flex items-center justify-between p-2 rounded border border-[var(--stroke)]">
             <div>
               <div><strong>ES:</strong> {ls.es}</div>
-              <div className="text-sm" style={{color:'var(--muted)'}}><strong>EN:</strong> {ls.en}</div>
+              <div className="text-sm" style={{ color: 'var(--muted)' }}><strong>EN:</strong> {ls.en}</div>
             </div>
             <button type="button" className="btn btn-ghost" onClick={() => del(i)}>Eliminar</button>
           </div>
@@ -70,13 +70,15 @@ export default function EventForm({
     description: { es: '', en: '' },
     headline: undefined,
     startsAt: new Date().toISOString(),
-    endsAt: new Date(Date.now() + 2*60*60*1000).toISOString(),
+    endsAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
     location: undefined,
     featured: false,
     banner: undefined,
     highlights: [],
     rewards: [],
     warnings: [],
+    sphereStartCmd: '',
+    sphereEndCmd: '',
   });
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -91,6 +93,8 @@ export default function EventForm({
       highlights: data.highlights ?? [],
       rewards: data.rewards ?? [],
       warnings: data.warnings ?? [],
+      sphereStartCmd: data.sphereStartCmd?.trim() ? data.sphereStartCmd.trim() : undefined,
+      sphereEndCmd: data.sphereEndCmd?.trim() ? data.sphereEndCmd.trim() : undefined,
     };
 
     try {
@@ -218,6 +222,34 @@ export default function EventForm({
         value={data.warnings ?? []}
         onChange={next => setData({ ...data, warnings: next })}
       />
+
+      {/* Comandos Sphere */}
+      <div className="grid md:grid-cols-2 gap-3">
+        <label className="grid gap-1">
+          <span>Comando Sphere al iniciar (opcional)</span>
+          <input
+            className="input"
+            placeholder=".addnpc orc ... / script ..."
+            value={data.sphereStartCmd ?? ''}
+            onChange={e => setData(d => ({ ...d, sphereStartCmd: e.target.value }))}
+          />
+          <span className="note text-xs">
+            Se ejecuta cuando comienza el evento (startsAt).
+          </span>
+        </label>
+        <label className="grid gap-1">
+          <span>Comando Sphere al finalizar (opcional)</span>
+          <input
+            className="input"
+            placeholder="comando para limpiar / cerrar evento"
+            value={data.sphereEndCmd ?? ''}
+            onChange={e => setData(d => ({ ...d, sphereEndCmd: e.target.value }))}
+          />
+          <span className="note text-xs">
+            Se ejecuta cuando termina el evento (endsAt).
+          </span>
+        </label>
+      </div>
 
       <div className="flex gap-2">
         <button className="btn btn-primary w-[160px] justify-center" disabled={busy}>

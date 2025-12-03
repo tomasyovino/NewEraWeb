@@ -1,12 +1,34 @@
 import { NextResponse } from 'next/server';
-import { dbGetRuleBySlug } from '@/db/sqlite';
 import { ruleSchema } from '@/lib/schemas';
+
+const VM_API_BASE = process.env.VM_API_BASE_URL!;
+const INTERNAL_KEY = process.env.VM_INTERNAL_API_KEY!;
 
 export async function GET(_req: Request, { params }: { params: { slug: string } }) {
     try {
-        const item = dbGetRuleBySlug(params.slug);
-        if (!item) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-        const data = ruleSchema.parse(item);
+        const res = await fetch(
+            `${VM_API_BASE}/rules/${encodeURIComponent(params.slug)}`,
+            {
+                headers: {
+                    'x-internal-key': INTERNAL_KEY,
+                },
+                cache: 'no-store',
+            },
+        );
+
+        if (res.status === 404) {
+            return NextResponse.json({ error: 'Not found' }, { status: 404 });
+        }
+
+        if (!res.ok) {
+            return NextResponse.json(
+                { error: `Upstream error (${res.status})` },
+                { status: 502 },
+            );
+        }
+
+        const raw = await res.json();
+        const data = ruleSchema.parse(raw);
         return NextResponse.json(data);
     } catch (err: any) {
         return NextResponse.json({ error: err?.message ?? 'Internal error' }, { status: 500 });

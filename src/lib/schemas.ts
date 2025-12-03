@@ -28,6 +28,7 @@ export const weeklyEventSchema = z.object({
   durationMinutes: z.number().int().positive().optional(),
   featured: z.boolean().optional(),
   icon: z.string().optional(),
+  sphereCmd: z.string().trim().optional(),
 });
 
 export const worldEventSchema = z.object({
@@ -43,6 +44,8 @@ export const worldEventSchema = z.object({
   highlights: z.array(localizedStringSchema).optional(),
   rewards: z.array(localizedStringSchema).optional(),
   warnings: z.array(localizedStringSchema).optional(),
+  sphereStartCmd: z.string().trim().optional(),
+  sphereEndCmd: z.string().trim().optional(),
 }).superRefine((val, ctx) => {
   if (Date.parse(val.endsAt) <= Date.parse(val.startsAt)) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: '`endsAt` must be after `startsAt`', path: ['endsAt'] });
