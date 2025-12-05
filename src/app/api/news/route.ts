@@ -17,7 +17,6 @@ export async function GET(req: NextRequest) {
         const page = Number.isFinite(pageParam) && pageParam > 0 ? pageParam : 1;
 
         const res = await fetchFromVM(`/news`);
-
         if (!res.ok) {
             return NextResponse.json(
                 { error: `Upstream error (${res.status})` },

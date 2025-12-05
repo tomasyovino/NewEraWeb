@@ -40,7 +40,6 @@ export default function EditWeeklyEventPage() {
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(data),
               });
-              console.log(res);
               if (!res.ok) throw new Error('No se pudo guardar');
               router.push('/admin/events/weekly');
             }}

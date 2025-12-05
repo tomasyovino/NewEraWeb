@@ -5,12 +5,12 @@ export async function fetchFromVM(
     path: string,
     opts?: RequestInit,
 ): Promise<Response> {
+    const headers = new Headers(opts?.headers ?? {});
+    headers.set('x-internal-key', INTERNAL_KEY);
+
     return fetch(`${VM_API_BASE}${path}`, {
-        cache: 'no-store',
-        headers: {
-            'x-internal-key': INTERNAL_KEY,
-            ...(opts?.headers ?? {}),
-        },
         ...opts,
+        cache: 'no-store',
+        headers,
     });
 }

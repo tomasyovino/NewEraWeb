@@ -16,11 +16,8 @@ import {
 } from './schemas';
 import { DEFAULT_TZ } from './constants';
 import { currentWeekday, compareTimeHHmm } from './time';
-import { eventsMock, worldEventsMock, donationsMock, packsMock, newsMock } from '@/mocks'
-import { boolEnv } from '@/helpers/dbHelpers';
 
 const isServer = typeof window === 'undefined';
-const USE_MOCK = boolEnv('USE_MOCK', false);
 
 function makeUrl(path: string) {
   if (!isServer) return path;
@@ -28,6 +25,7 @@ function makeUrl(path: string) {
     process.env.API_BASE_URL
     ?? process.env.NEXT_PUBLIC_BASE_URL
     ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `http://localhost:${process.env.PORT ?? 3000}`);
+
   return new URL(path, base).toString();
 }
 
@@ -41,18 +39,6 @@ async function fetchJson<T>(path: string): Promise<T> {
 /* ================== WORLD EVENTS ================== */
 
 export async function getWorldEvents(opts?: { limit?: number; now?: Date }): Promise<WorldEvent[]> {
-  const limit = opts?.limit ?? 6;
-  const now = opts?.now ?? new Date();
-
-  if (USE_MOCK) {
-    const all = worldEventListSchema.parse(worldEventsMock as unknown);
-    const t = now.getTime();
-    return all
-      .filter(ev => Date.parse(ev.endsAt) >= t)
-      .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt))
-      .slice(0, Math.max(0, limit));
-  }
-
   const raw = await fetchJson<unknown>(`/api/world-events`);
   return worldEventListSchema.parse(raw);
 }
@@ -60,9 +46,6 @@ export async function getWorldEvents(opts?: { limit?: number; now?: Date }): Pro
 /* ================== WEEKLY EVENTS ================== */
 
 export async function getWeeklyEvents(): Promise<WeeklyEvent[]> {
-  if (USE_MOCK) {
-    return weeklyEventListSchema.parse(eventsMock as unknown);
-  }
   const raw = await fetchJson<unknown>('/api/weekly-events');
   return weeklyEventListSchema.parse(raw);
 }
@@ -112,46 +95,21 @@ export async function getWeeklyAgendaSlots(): Promise<EventSlot[]> {
 /* ================== DONATIONS / STATUS ================== */
 
 export async function getDonations() {
-  if (USE_MOCK) {
-    return donationListSchema.parse(donationsMock as unknown);
-  }
   const raw = await fetchJson<unknown>('/api/donations');
   return donationListSchema.parse(raw);
 }
 
 export async function getPacks(): Promise<Pack[]> {
-  if (USE_MOCK) {
-    return packListSchema.parse(packsMock as unknown);
-  }
   return packListSchema.parse(await fetchJson<unknown>('/api/packs'));
 }
 
 /* ================== NEWS ================== */
 export async function getLatestNews(limit = 3): Promise<New[]> {
-  if (USE_MOCK) {
-    const all = newListSchema.parse(newsMock as unknown);
-    const pub = all
-      .filter(n => n.publishedAt && Date.now() >= Date.parse(n.publishedAt))
-      .sort((a, b) => Date.parse(b.publishedAt!) - Date.parse(a.publishedAt!));
-    return pub.slice(0, limit);
-  }
   const raw = await fetchJson<unknown>(`/api/news?published=1&limit=${limit}`);
   return newListSchema.parse(raw);
 }
 
 export async function getAllPublishedNewsPage(page = 1, limit = 10): Promise<NewsPage> {
-  if (USE_MOCK) {
-    const all = newListSchema.parse(newsMock as unknown)
-      .filter(n => n.publishedAt && Date.now() >= Date.parse(n.publishedAt))
-      .sort((a, b) => Date.parse(b.publishedAt!) - Date.parse(a.publishedAt!));
-    const total = all.length;
-    const pages = Math.max(1, Math.ceil(total / limit));
-    const p = Math.max(1, Math.min(page, pages));
-    const start = (p - 1) * limit;
-    const items = all.slice(start, start + limit);
-    return { items, total, page: p, limit, pages };
-  }
-
   const url = `/api/news?published=1&withMeta=1&limit=${limit}&page=${page}`;
   const raw = await fetchJson<unknown>(url);
   const { items, total, pages }: any = raw as any;
@@ -165,13 +123,6 @@ export async function getAllPublishedNewsPage(page = 1, limit = 10): Promise<New
 }
 
 export async function getNewsBySlug(slug: string): Promise<New | null> {
-  if (USE_MOCK) {
-    const all = newListSchema.parse(newsMock as unknown);
-    const item = all.find(
-      n => n.slug === slug && n.publishedAt && Date.now() >= Date.parse(n.publishedAt)
-    );
-    return item ?? null;
-  }
   const raw = await fetchJson<unknown>(`/api/news?published=1&limit=1&slug=${encodeURIComponent(slug)}`);
   const arr = newListSchema.parse(raw);
   return arr[0] ?? null;
@@ -179,15 +130,11 @@ export async function getNewsBySlug(slug: string): Promise<New | null> {
 
 /* ================== RULES ================== */
 export async function getRules(): Promise<Rule[]> {
-  if (USE_MOCK) {
-    return [];
-  }
   const raw = await fetchJson<unknown>('/api/rules');
   return ruleListSchema.parse(raw);
 }
 
 export async function getRuleBySlug(slug: string): Promise<Rule | null> {
-  if (USE_MOCK) return null;
   try {
     const raw = await fetchJson<unknown>(`/api/rules/${encodeURIComponent(slug)}`);
     return ruleSchema.parse(raw);
@@ -198,9 +145,6 @@ export async function getRuleBySlug(slug: string): Promise<Rule | null> {
 
 /* ================== ABOUT ================== */
 export async function getAbout(): Promise<AboutEntry[]> {
-  if (USE_MOCK) {
-    return [];
-  }
   const raw = await fetchJson<unknown>('/api/about');
   return aboutListSchema.parse(raw);
 }
